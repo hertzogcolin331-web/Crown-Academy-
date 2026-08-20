@@ -1649,54 +1649,84 @@ Difficulty Level: ${difficulty}`;
             showModal("Copied", translations[currentLanguage].testCopiedNotice);
         }
 
-        function downloadTestPDF() {
-            if (!generatedTest) return;
-            
-            const element = document.createElement('div');
-            element.style.padding = '20px';
-            element.style.fontFamily = 'Arial, sans-serif';
-            element.style.color = '#0f172a';
-            element.style.backgroundColor = '#ffffff';
+ function downloadTestPDF() {
+    if (!generatedTest) return;
 
-            element.innerHTML = `
-                <div style="border-bottom: 2px solid #0f172a; padding-bottom: 12px; margin-bottom: 20px;">
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                        <div>
-                            <h1 style="font-size: 20px; font-weight: bold; margin: 0; text-transform: uppercase;">${generatedTest.title || 'NATIONAL SENIOR CERTIFICATE TEST'}</h1>
-                            <p style="font-size: 14px; color: #4338ca; font-weight: bold; margin: 4px 0 0 0;">${(generatedTest.subject || '').toUpperCase()} ${generatedTest.grade ? '- ' + generatedTest.grade.toUpperCase() : ''}</p>
-                        </div>
-                        <div style="text-align: right; font-size: 12px;">
-                            <div style="font-weight: bold; text-transform: uppercase;">${generatedTest.grade || ''}</div>
-                            <div style="font-size: 14px; font-weight: bold; margin-top: 2px;">TOTAL: ${generatedTest.totalMarks || 25} MARKS</div>
-                            <div style="color: #64748b; font-size: 11px;">TIME: ${generatedTest.timeMinutes || 30} MINUTES</div>
-                        </div>
-                    </div>
-                    <div style="margin-top: 15px; padding: 10px; background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; font-size: 11px; color: #334155;">
-                        <strong>INSTRUCTIONS & INFORMATION:</strong>
-                        <ol style="margin: 4px 0 0 18px; padding: 0;">
-                            <li>Answer ALL questions in the spaces provided.</li>
-                            <li>Number the answers correctly according to the numbering system used in this question paper.</li>
-                            <li>Write neatly and legibly.</li>
-                        </ol>
-                    </div>
-                </div>
+    const element = document.createElement('div');
+    element.style.padding = '20px';
+    element.style.fontFamily = 'Arial, sans-serif';
+    element.style.color = '#0f172a';
+    element.style.backgroundColor = '#ffffff';
+
+    // Build the clean PDF HTML layout
+    let memoHTML = `
+        <div style="border-bottom: 2px solid #0f172a; padding-bottom: 12px; margin-bottom: 20px;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
                 <div>
-                    ${(generatedTest.questions || []).map((q, idx) => `
-                        <div style="margin-bottom: 20px; page-break-inside: avoid;">
-                            <div style="display: flex; justify-content: space-between; font-weight: 600; font-size: 13px;">
-                                <span><strong style="color: #4338ca; margin-right: 6px;">${q.questionNumber || (idx + 1) + '.'}</strong> ${q.questionText}</span>
-                                <span style="font-size: 11px; white-space: nowrap; margin-left: 10px; font-weight: bold;">[${q.marks} ${q.marks === 1 ? 'mark' : 'marks'}]</span>
-                            </div>
-                            ${q.type === 'mcq' && q.options ? `
-                                <div style="margin-top: 8px; margin-left: 15px; display: grid; grid-template-columns: 1fr 1fr; gap: 6px; font-size: 12px;">
-                                    ${q.options.map(opt => `<div style="padding: 6px 10px; background-color: #f8fafc; border-radius: 4px; border: 1px solid #cbd5e1;">${opt}</div>`).join('')}
-                                </div>
-                            ` : `
-                                <div style="margin-top: 12px;">
-                                    <div style="border-bottom: 1px dashed #cbd5e1; height: 24px; width: 100%;"></div>
-                                    <div style="border-bottom: 1px dashed #cbd5e1; height: 24px; width: 100%;"></div>
-                                </div>
-                            `}
+                    <h1 style="font-size: 20px; font-weight: bold; margin: 0; text-transform: uppercase;">${generatedTest.title || 'NATIONAL SENIOR CERTIFICATE TEST'}</h1>
+                    <p style="font-size: 14px; color: #4338ca; font-weight: bold; margin: 4px 0 0 0;">${(generatedTest.subject || '').toUpperCase()} ${generatedTest.grade ? '- ' + generatedTest.grade.toUpperCase() : ''}</p>
+                </div>
+                <div style="color: #64748b; font-size: 11px;">TIME: ${generatedTest.timeMinutes || 30} MINUTES</div>
+            </div>
+        </div>
+        
+        <div style="margin-top: 15px; padding: 10px; background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; font-size: 11px; color: #334155;">
+            <strong>INSTRUCTIONS & INFORMATION:</strong>
+            <ol style="margin: 4px 0 0 16px; padding: 0;">
+                <li>Answer ALL questions in the spaces provided.</li>
+                <li>Number the answers correctly according to the numbering system used in this question paper.</li>
+                <li>Write neatly and legibly.</li>
+            </ol>
+        </div>
+        
+        <h2 style="font-size: 18px; font-weight: bold; margin-top: 25px; margin-bottom: 15px; color: #0f172a; text-transform: uppercase; border-bottom: 1px solid #0f172a; padding-bottom: 5px;">Marking Memorandum</h2>
+    `;
+
+    // Loop through questions and force step-by-step items into a clean bulleted list structure
+    (generatedTest.questions || []).forEach((q, idx) => {
+        let stepsHTML = '';
+        if (q.memoSolution) {
+            // Split by periods or newlines to automatically create clean bullet points from paragraphs
+            const steps = Array.isArray(q.memoSolution) ? q.memoSolution : q.memoSolution.split('.').filter(s => s.trim().length > 0);
+            stepsHTML = `<ul style="margin: 5px 0 0 20px; padding: 0; list-style-type: disc;">`;
+            steps.forEach(step => {
+                stepsHTML += `<li style="margin-bottom: 6px; font-size: 13px; line-height: 1.5; color: #334155;">${step.trim()}.</li>`;
+            });
+            stepsHTML += `</ul>`;
+        } else {
+            stepsHTML = `<p style="margin: 5px 0 0 0; font-size: 13px; font-style: italic; color: #64748b;">Answer: ${q.correctAnswer || 'Not specified'}</p>`;
+        }
+
+        memoHTML += `
+            <div class="pdf-page-break-avoid" style="margin-bottom: 25px; padding-bottom: 15px; border-bottom: 1px dashed #cbd5e1; page-break-inside: avoid;">
+                <div style="display: flex; justify-content: space-between; font-weight: 600; font-size: 13px; margin-bottom: 6px;">
+                    <span><strong style="color: #4338ca; margin-right: 6px;">${q.questionNumber || (idx + 1) + '.'}</strong>${q.questionText || ''}</span>
+                    <span style="font-size: 11px; white-space: nowrap; margin-left: 10px; font-weight: bold;">[${q.marks} ${q.marks === 1 ? 'mark' : 'marks'}]</span>
+                </div>
+                <div style="margin-top: 10px; padding-left: 15px;">
+                    <span style="font-weight: bold; font-size: 12px; color: #4338ca; text-transform: uppercase; display: block; margin-bottom: 4px;">Solution Steps:</span>
+                    ${stepsHTML}
+                </div>
+            </div>
+        `;
+    });
+
+    element.innerHTML = memoHTML;
+
+    // Strict html2pdf options to enforce margins and prevent split/cut-off bullets across pages
+    const options = {
+        margin:       15, // Fixed! Safe 15mm page borders on all sides
+        filename:     `${(generatedTest.title || 'Memo').replace(/\s+/g, '_')}_Memorandum.pdf`,
+        image:        { type: 'jpeg', quality: 0.98 },
+        html2canvas:  { scale: 2, useCORS: true, logging: false, letterRendering: true },
+        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
+        pagebreak:    { mode: ['avoid-all', 'css', 'legacy'], avoid: '.pdf-page-break-avoid' }
+    };
+
+    // Run layout conversion and automatically deliver file download to user browser
+    html2pdf().from(element).set(options).save();
+}
+
                         </div>
                     `).join('')}
                 </div>
