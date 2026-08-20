@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Crown Academy Test Generator</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://tailwindcss.com"></script>
+    <!-- Standalone Compiled CSS Engine - Fixes Blank Layout Rendering -->
+    <link rel="stylesheet" href="https://cloudflare.com">
     <!-- html2pdf.js CDN for direct PDF Download -->
     <script src="https://cloudflare.com"></script>
     <!-- FontAwesome CDN for Icons -->
@@ -56,67 +56,67 @@
 </head>
 <body class="text-slate-800 min-h-screen flex flex-col">
 
-    <header class="bg-indigo-900 text-white shadow-md sticky top-0 z-40 no-print">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+    <header class="bg-indigo-900 text-white shadow-md sticky top-0 Regal-Header z-40 no-print" style="background-color: #1e1b4b;">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between" style="display: flex; height: 4rem; justify-content: space-between; align-items: center; max-width: 80rem; margin: 0 auto;">
             <!-- Logo & Title -->
-            <div class="flex items-center gap-3 cursor-pointer" onclick="showLandingPage()">
-                <div class="bg-amber-400 text-indigo-950 p-2 rounded-xl flex items-center justify-center font-bold text-xl shadow">
-                    <i class="fa-solid font-bold fa-crown text-amber-900 text-lg"></i>
+            <div class="flex items-center gap-3 cursor-pointer" onclick="showLandingPage()" style="display: flex; align-items: center; gap: 0.75rem;">
+                <div class="bg-amber-400 text-indigo-950 p-2 rounded-xl flex items-center justify-center font-bold text-xl shadow" style="background-color: #fbbf24; color: #1e1b4b; padding: 0.5rem; border-radius: 0.75rem; font-weight: 700; font-size: 1.25rem; display: flex; align-items: center; justify-content: center;">
+                    <i class="fa-solid font-bold fa-crown text-amber-900 text-lg" style="color: #78350f;"></i>
                 </div>
                 <div>
-                    <h1 class="font-bold text-lg leading-tight tracking-wide">Crown Academy</h1>
-                    <p class="text-xs text-indigo-200">AI Test & Exam Generator</p>
+                    <h1 class="font-bold text-lg leading-tight tracking-wide" style="font-weight: 700; font-size: 1.125rem; line-height: 1.25;">Crown Academy</h1>
+                    <p class="text-xs text-indigo-200" style="font-size: 0.75rem; color: #c7d2fe;">AI Test & Exam Generator</p>
                 </div>
             </div>
 
             <!-- Navigation Links -->
-            <nav class="hidden md:flex items-center gap-6 text-xs font-semibold text-indigo-200">
-                <button onclick="showLandingPage()" class="hover:text-white transition">Home</button>
-                <button onclick="scrollToSection('pricing')" class="hover:text-white transition">Pricing</button>
-                <button onclick="scrollToSection('contact')" class="hover:text-white transition">Contact</button>
-                <button onclick="navigateToGenerator()" class="hover:text-white transition text-amber-300 font-bold">Generator Tool</button>
+            <nav class="hidden md:flex items-center gap-6 text-xs font-semibold text-indigo-200" style="display: flex; align-items: center; gap: 1.5rem; font-size: 0.75rem; font-weight: 600;">
+                <button onclick="showLandingPage()" class="hover:text-white transition text-indigo-200">Home</button>
+                <button onclick="scrollToSection('pricing')" class="hover:text-white transition text-indigo-200">Pricing</button>
+                <button onclick="scrollToSection('contact')" class="hover:text-white transition text-indigo-200">Contact</button>
+                <button onclick="navigateToGenerator()" class="hover:text-white transition font-bold" style="color: #fcd34d;">Generator Tool</button>
             </nav>
 
             <!-- Header Controls & Auth State -->
-            <div class="flex items-center gap-3">
+            <div class="flex items-center gap-3" style="display: flex; align-items: center; gap: 0.75rem;">
                 <!-- Language Toggle -->
-                <div class="bg-indigo-950/60 p-1 rounded-xl flex items-center border border-indigo-700/50">
-                    <button id="lang-en" onclick="setLanguage('en')" class="py-1 px-2.5 text-xs font-semibold rounded-lg flex items-center gap-1 transition bg-white text-indigo-900 shadow-sm">
+                <div class="bg-indigo-950 p-1 rounded-xl flex items-center border border-indigo-700" style="background-color: #0f172a; padding: 0.25rem; border-radius: 0.75rem; display: flex; align-items: center; border: 1px solid #4338ca;">
+                    <button id="lang-en" onclick="setLanguage('en')" class="py-1 px-2-5 text-xs font-semibold rounded-lg flex items-center gap-1 transition bg-white text-indigo-900 shadow-sm" style="padding: 0.25rem 0.625rem; font-size: 0.75rem; font-weight: 600; border-radius: 0.5rem; background-color: white; color: #1e1b4b;">
                         🇬🇧 EN
                     </button>
-                    <button id="lang-af" onclick="setLanguage('af')" class="py-1 px-2.5 text-xs font-semibold rounded-lg flex items-center gap-1 transition text-indigo-200 hover:text-white">
+                    <button id="lang-af" onclick="setLanguage('af')" class="py-1 px-2-5 text-xs font-semibold rounded-lg flex items-center gap-1 transition text-indigo-200 hover:text-white" style="padding: 0.25rem 0.625rem; font-size: 0.75rem; font-weight: 600; border-radius: 0.5rem; color: #c7d2fe;">
                         🇿🇦 AF
                     </button>
                 </div>
 
                 <!-- Logged In / Out Buttons -->
-                <div id="auth-header-logged-out" class="flex items-center gap-2">
-                    <button onclick="openAuthModal('login')" class="px-3 py-1.5 text-xs font-semibold rounded-xl bg-amber-400 hover:bg-amber-300 text-indigo-950 transition shadow-sm flex items-center gap-1.5">
+                <div id="auth-header-logged-out" class="flex items-center gap-2" style="display: flex; align-items: center; gap: 0.5rem;">
+                    <button onclick="openAuthModal('login')" class="px-3 py-1-5 text-xs font-semibold rounded-xl bg-amber-400 hover:bg-amber-300 text-indigo-950 transition shadow-sm flex items-center gap-1-5" style="background-color: #fbbf24; color: #1e1b4b; padding: 0.375rem 0.75rem; font-size: 0.75rem; font-weight: 600; border-radius: 0.75rem; display: flex; align-items: center; gap: 0.375rem;">
                         <i class="fa-solid fa-right-to-bracket"></i>
                         <span>Log In</span>
                     </button>
-                    <button onclick="openAuthModal('register')" class="px-3 py-1.5 text-xs font-semibold rounded-xl border border-indigo-700 text-indigo-200 hover:text-white transition">
+                    <button onclick="openAuthModal('register')" class="px-3 py-1-5 text-xs font-semibold rounded-xl border border-indigo-700 text-indigo-200 hover:text-white transition" style="color: #c7d2fe; padding: 0.375rem 0.75rem; font-size: 0.75rem; font-weight: 600; border-radius: 0.75rem; border: 1px solid #4338ca; background: transparent;">
                         <span>Register</span>
                     </button>
                 </div>
 
-                <div id="auth-header-logged-in" class="hidden flex items-center gap-3">
-                    <div class="flex items-center gap-2 bg-indigo-800/80 px-3 py-1 rounded-xl border border-indigo-700">
-                        <div class="w-6 h-6 rounded-full bg-amber-400 text-indigo-950 flex items-center justify-center text-xs font-bold">
+                <div id="auth-header-logged-in" class="hidden flex items-center gap-3" style="display: none; align-items: center; gap: 0.75rem;">
+                    <div class="flex items-center gap-2 bg-indigo-800 px-3 py-1 rounded-xl border border-indigo-700" style="background-color: #3730a3; padding: 0.25rem 0.75rem; border-radius: 0.75rem; display: flex; align-items: center; gap: 0.5rem; border: 1px solid #4338ca;">
+                        <div class="w-6 h-6 rounded-full bg-amber-400 text-indigo-950 flex items-center justify-center text-xs font-bold" style="width: 1.5rem; height: 1.5rem; border-radius: 9999px; background-color: #fbbf24; color: #1e1b4b; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700;">
                             <i class="fa-solid fa-user-graduate"></i>
                         </div>
-                        <span id="user-display-name" class="text-xs font-medium text-white">Teacher Account</span>
+                        <span id="user-display-name" class="text-xs font-medium text-white" style="font-size: 0.75rem; font-weight: 500; color: white;">Teacher Account</span>
                         <!-- Admin Panel Button - Only visible to Admin -->
-                        <button id="admin-panel-btn" onclick="openAdminModal()" class="hidden bg-amber-400 hover:bg-amber-300 text-indigo-950 text-[10px] font-extrabold px-2.5 py-1 rounded-md flex items-center gap-1 shadow transition">
-                            <i class="fa-solid fa-user-gear text-amber-900"></i> Admin Panel
+                        <button id="admin-panel-btn" onclick="openAdminModal()" class="hidden bg-amber-400 hover:bg-amber-300 text-indigo-950 text-[10px] font-extrabold px-2.5 py-1 rounded-md flex items-center gap-1 shadow transition" style="background-color: #fbbf24; color: #1e1b4b; font-size: 10px; font-weight: 800; padding: 0.25rem 0.625rem; border-radius: 0.375rem; display: none; align-items: center; gap: 0.25rem;">
+                            <i class="fa-solid fa-user-gear text-amber-900" style="color: #78350f;"></i> Admin Panel
                         </button>
                         <!-- Gemini 3 Flash Badge - Only visible to Admin -->
-                        <span id="admin-gemini-badge" class="hidden bg-indigo-950 text-amber-400 text-[10px] font-extrabold px-2 py-0.5 rounded-md flex items-center gap-1 border border-indigo-700">
+                        <span id="admin-gemini-badge" class="hidden bg-indigo-950 text-amber-400 text-[10px] font-extrabold px-2 py-0.5 rounded-md flex items-center gap-1 border border-indigo-700" style="background-color: #0f172a; color: #fbbf24; font-size: 10px; font-weight: 800; padding: 0.125rem 0.5rem; border-radius: 0.375rem; display: none; align-items: center; gap: 0.25rem; border: 1px solid #4338ca;">
                             <i class="fa-solid fa-bolt"></i> Gemini 3 Flash
                         </span>
                     </div>
-                    <button onclick="handleLogout()" class="text-xs text-indigo-300 hover:text-red-300 transition" title="Log Out">
-                        <i class="fa-solid fa-power-off text-sm"></i>
+                    <button onclick="handleLogout()" class="text-xs text-indigo-300 hover:text-red-300 transition" style="font-size: 0.75rem; color: #a5b4fc;" title="Log Out">
+                        <i class="fa-solid fa-power-off text-sm" style="font-size: 0.875rem;"></i>
                     </button>
                 </div>
             </div>
@@ -124,37 +124,9 @@
     </header>
 
     <!-- MAIN APP CANVAS / LAYERS -->
-    <main class="flex-1 flex flex-col">
+    <main class="flex-1 flex flex-col" style="flex: 1 1 0%; display: flex; flex-direction: column;">
         <!-- LANDING / HOME PAGE SECTION -->
-        <div id="landing-page" class="space-y-12 pb-16 no-print">
+        <div id="landing-page" class="space-y-12 pb-16 no-print" style="padding-bottom: 4rem;">
             <!-- Hero Section -->
-            <section class="bg-gradient-to-b from-indigo-900 to-indigo-950 text-white py-16 px-4 sm:px-6 lg:px-8 text-center relative overflow-hidden">
-                <div class="max-w-4xl mx-auto space-y-6 relative z-10">
-                    <span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-400/20 border border-amber-400/40 text-amber-300 text-xs font-semibold uppercase tracking-wider">
-                        <i class="fa-solid fa-star text-amber-400"></i> Curriculum Aligned
-                    </span>
-                    <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight leading-tight" id="hero-title">
-                        Generate Professional Tests & Memorandums in Seconds
-                    </h1>
-                    <p class="text-slate-300 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed" id="hero-desc">
-                        Designed for educators and learners. Create custom assessments for Grades 1–12 with full marking memorandums, interactive practice, and instant print export.
-                    </p>
-                    <div class="pt-4 flex flex-wrap gap-4 justify-center items-center">
-                        <button onclick="navigateToGenerator()" class="px-6 py-3.5 bg-amber-400 hover:bg-amber-300 text-indigo-950 font-bold rounded-xl text-sm shadow-lg shadow-amber-400/20 transition flex items-center gap-2">
-                            <i class="fa-solid fa-wand-magic-sparkles"></i> <span id="btn-open-gen">Open Test Generator</span>
-                        </button>
-                        <button onclick="scrollToSection('pricing')" class="px-6 py-3.5 bg-indigo-800/80 hover:bg-indigo-800 text-white font-medium rounded-xl text-sm border border-indigo-700/60 transition">
-                            <span id="btn-view-pricing">View Pricing</span>
-                        </button>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Quick Features -->
-            <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid md:grid-cols-3 gap-6">
-                <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm flex gap-4">
-                    <div class="w-12 h-12 bg-indigo-50 rounded-xl flex items-center justify-center text-indigo-600 text-xl shrink-0"><i class="fa-solid fa-graduation-cap"></i></div>
-                    <div><h3 class="font-bold text-base text-slate-900 mb-1" id="f1-t">Caps Aligned Content</h3><p class="text-slate-500 text-xs" id="f1-d">Aligned with standard curriculum requirements, examinations structures and grade difficulty boundaries.</p></div>
-                </div>
-                <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm flex gap-4">
-                    <div class="w-12 h-12 bg-amber-50 rounded-xl flex items-center justify-center text-amber-600 text-xl shrink-0"><i class="fa-solid fa-list-check"></i></div>
+            <section class="bg-indigo-950 text-white py-16 px-4 sm:px-6 lg:px-8 text-center relative overflow-hidden" style="background: linear-to-b, #312e81, #1e1b4b; color: white; padding: 4rem 1rem; text-align: center;">
+                <div class="max-w-4xl mx-auto relative z-10" style="max-width: 56rem; margin: 0 auto; display: flex; flex-direction: column; gap: 1.5rem;">
