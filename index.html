@@ -3,146 +3,1790 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detailed Step-by-Step Memorandum</title>
-    <!-- Include html2pdf.js for robust PDF generation -->
+    <title>Crown Academy Test Generator</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- html2pdf.js CDN for direct PDF Download -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <!-- FontAwesome CDN for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
     <style>
-        :root {
-            --primary: #1e293b;
-            --secondary: #0284c7;
-            --accent: #38bdf8;
-            --bg-light: #f8fafc;
-            --border-color: #cbd5e1;
-            --text-main: #334155;
-        }
-
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            color: var(--text-main);
-            background-color: #f1f5f9;
-            margin: 0;
-            padding: 20px;
-            line-height: 1.6;
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
         }
-
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: #ffffff;
-            padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
         }
-
-        h1 {
-            color: var(--primary);
-            border-bottom: 3px solid var(--accent);
-            padding-bottom: 12px;
-            margin-top: 0;
-            font-size: 24px;
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
         }
-
-        h2 {
-            color: var(--secondary);
-            font-size: 18px;
-            margin-top: 25px;
-            margin-bottom: 10px;
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
         }
-
-        .step-card {
-            background-color: var(--bg-light);
-            border: 1px solid var(--border-color);
-            border-left: 5px solid var(--secondary);
-            padding: 15px 20px;
-            margin-bottom: 20px;
-            border-radius: 6px;
-            page-break-inside: avoid;
-            break-inside: avoid;
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
         }
-
-        ul {
-            margin: 0;
-            padding-left: 20px;
-        }
-
-        li {
-            margin-bottom: 8px;
-        }
-
-        .btn-container {
-            margin-top: 30px;
-            text-align: center;
-        }
-
-        .download-btn {
-            background-color: var(--secondary);
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            font-size: 16px;
-            font-weight: bold;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: background-color 0.2s;
-        }
-
-        .download-btn:hover {
-            background-color: #0369a1;
+        /* Print styles for test and memorandum export */
+        @media print {
+            body {
+                background: white !important;
+                color: black !important;
+            }
+            .no-print {
+                display: none !important;
+            }
+            .print-only {
+                display: block !important;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+            .shadow-sm, .shadow-md, .shadow-lg {
+                box-shadow: none !important;
+            }
+            .border {
+                border-color: #e2e8f0 !important;
+            }
         }
     </style>
 </head>
-<body>
+<body class="text-slate-800 min-h-screen flex flex-col">
 
-    <div class="container" id="memo-content">
-        <h1>Marking Memorandum - Step-by-Step Solution</h1>
-        <p>The detailed step-by-step breakdown for every question is listed below:</p>
+    <header class="bg-indigo-900 text-white shadow-md sticky top-0 z-40 no-print">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <!-- Logo & Title -->
+            <div class="flex items-center gap-3 cursor-pointer" onclick="showLandingPage()">
+                <div class="bg-amber-400 text-indigo-950 p-2 rounded-xl flex items-center justify-center font-bold text-xl shadow">
+                    <i class="fa-solid font-bold fa-crown text-amber-900 text-lg"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-lg leading-tight tracking-wide">Crown Academy</h1>
+                    <p class="text-xs text-indigo-200">AI Test & Exam Generator</p>
+                </div>
+            </div>
 
-        <div class="step-card">
-            <h2>Question 1 Solution</h2>
-            <ul>
-                <li>First, identify the initial state parameters and given variables.</li>
-                <li>Next, apply the core mathematical formula or operational rule required for the problem statement.</li>
-                <li>Finally, compute the intermediate values to arrive at the correct final result.</li>
-            </ul>
+            <!-- Navigation Links -->
+            <nav class="hidden md:flex items-center gap-6 text-xs font-semibold text-indigo-200">
+                <button onclick="showLandingPage()" class="hover:text-white transition">Home</button>
+                <button onclick="scrollToSection('pricing')" class="hover:text-white transition">Pricing</button>
+                <button onclick="scrollToSection('contact')" class="hover:text-white transition">Contact</button>
+                <button onclick="navigateToGenerator()" class="hover:text-white transition text-amber-300 font-bold">Generator Tool</button>
+            </nav>
+
+            <!-- Header Controls & Auth State -->
+            <div class="flex items-center gap-3">
+                <!-- Language Toggle -->
+                <div class="bg-indigo-950/60 p-1 rounded-xl flex items-center border border-indigo-700/50">
+                    <button id="lang-en" onclick="setLanguage('en')" class="py-1 px-2.5 text-xs font-semibold rounded-lg flex items-center gap-1 transition bg-white text-indigo-900 shadow-sm">
+                        🇬🇧 EN
+                    </button>
+                    <button id="lang-af" onclick="setLanguage('af')" class="py-1 px-2.5 text-xs font-semibold rounded-lg flex items-center gap-1 transition text-indigo-200 hover:text-white">
+                        🇿🇦 AF
+                    </button>
+                </div>
+
+                <!-- Logged In / Out Buttons -->
+                <div id="auth-header-logged-out" class="flex items-center gap-2">
+                    <button onclick="openAuthModal('login')" class="px-3 py-1.5 text-xs font-semibold rounded-xl bg-amber-400 hover:bg-amber-300 text-indigo-950 transition shadow-sm flex items-center gap-1.5">
+                        <i class="fa-solid fa-right-to-bracket"></i>
+                        <span>Log In</span>
+                    </button>
+                </div>
+
+                <div id="auth-header-logged-in" class="hidden flex items-center gap-3">
+                    <div class="flex items-center gap-2 bg-indigo-800/80 px-3 py-1 rounded-xl border border-indigo-700">
+                        <div class="w-6 h-6 rounded-full bg-amber-400 text-indigo-950 flex items-center justify-center text-xs font-bold">
+                            <i class="fa-solid fa-user-graduate"></i>
+                        </div>
+                        <span id="user-display-name" class="text-xs font-medium text-white">Teacher Account</span>
+                        <!-- Admin Panel Button - Only visible to Admin -->
+                        <button id="admin-panel-btn" onclick="openAdminModal()" class="hidden bg-amber-400 hover:bg-amber-300 text-indigo-950 text-[10px] font-extrabold px-2.5 py-1 rounded-md flex items-center gap-1 shadow transition">
+                            <i class="fa-solid fa-user-gear text-amber-900"></i> Admin Panel
+                        </button>
+                        <!-- Gemini 3 Flash Badge - Only visible to Admin -->
+                        <span id="admin-gemini-badge" class="hidden bg-indigo-950 text-amber-400 text-[10px] font-extrabold px-2 py-0.5 rounded-md flex items-center gap-1 border border-indigo-700">
+                            <i class="fa-solid fa-bolt"></i> Gemini 3 Flash
+                        </span>
+                    </div>
+                    <button onclick="handleLogout()" class="text-xs text-indigo-300 hover:text-red-300 transition" title="Log Out">
+                        <i class="fa-solid fa-power-off text-sm"></i>
+                    </button>
+                </div>
+            </div>
         </div>
+    </header>
 
-        <div class="step-card">
-            <h2>Question 2 Solution</h2>
-            <ul>
-                <li>Examine the structural requirements and logical constraints of the prompt.</li>
-                <li>Perform the required transformation or data mapping step-by-step.</li>
-                <li>Verify the output to ensure absolute accuracy against the target criteria.</li>
-            </ul>
-        </div>
+    <!-- LANDING / HOME PAGE SECTION -->
+    <div id="landing-page" class="flex-1 space-y-12 pb-16 no-print">
+        
+        <!-- Hero Section -->
+        <section class="bg-gradient-to-b from-indigo-900 to-indigo-950 text-white py-16 px-4 sm:px-6 lg:px-8 text-center relative overflow-hidden">
+            <div class="max-w-4xl mx-auto space-y-6 relative z-10">
+                <span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-400/20 border border-amber-400/40 text-amber-300 text-xs font-semibold uppercase tracking-wider">
+                    <i class="fa-solid fa-star text-amber-400"></i> Curriculum Aligned
+                </span>
+                <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight leading-tight">
+                    Generate Professional Tests & Memorandums in Seconds
+                </h1>
+                <p class="text-slate-300 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed">
+                    Designed for educators and learners. Create custom assessments for Grades 1–12 with full marking memorandums, interactive practice, and instant print export.
+                </p>
+                <div class="pt-4 flex flex-wrap gap-4 justify-center items-center">
+                    <button onclick="navigateToGenerator()" class="px-6 py-3.5 bg-amber-400 hover:bg-amber-300 text-indigo-950 font-bold rounded-xl text-sm shadow-lg shadow-amber-400/20 transition flex items-center gap-2">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i> Open Test Generator
+                    </button>
+                    <button onclick="scrollToSection('pricing')" class="px-6 py-3.5 bg-indigo-800/80 hover:bg-indigo-800 text-white font-semibold rounded-xl text-sm border border-indigo-700 transition">
+                        View Pricing Plans
+                    </button>
+                </div>
+            </div>
+        </section>
 
-        <div class="step-card">
-            <h2>Question 3 Solution</h2>
-            <ul>
-                <li>Review all provided data sets and verify consistency across parameters.</li>
-                <li>Execute the validation sequence to eliminate potential errors or missing variables.</li>
-                <li>Compile and output the final validated sequence as required.</li>
-            </ul>
+        <!-- Features Showcase Grid -->
+        <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+            <div class="text-center space-y-2">
+                <h2 class="text-2xl font-bold text-slate-900">Built Specifically for Educators & Learners</h2>
+                <p class="text-xs sm:text-sm text-slate-500">Everything you need to save hours on exam preparation</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm space-y-3">
+                    <div class="w-12 h-12 bg-indigo-50 text-indigo-600 rounded-xl flex items-center justify-center text-xl font-bold">
+                        <i class="fa-solid fa-file-invoice"></i>
+                    </div>
+                    <h3 class="font-bold text-slate-800 text-base">Automatic Memorandums</h3>
+                    <p class="text-xs text-slate-600 leading-relaxed">Generates comprehensive step-by-step marking memorandums with mark allocation guides for accurate grading.</p>
+                </div>
+                <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm space-y-3">
+                    <div class="w-12 h-12 bg-amber-50 text-amber-600 rounded-xl flex items-center justify-center text-xl font-bold">
+                        <i class="fa-solid fa-laptop-file"></i>
+                    </div>
+                    <h3 class="font-bold text-slate-800 text-base">Interactive & Printable</h3>
+                    <p class="text-xs text-slate-600 leading-relaxed">Switch between standard PDF printable test papers and online interactive self-grading mode with ease.</p>
+                </div>
+                <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm space-y-3">
+                    <div class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center text-xl font-bold">
+                        <i class="fa-solid fa-paperclip"></i>
+                    </div>
+                    <h3 class="font-bold text-slate-800 text-base">Upload Custom Notes</h3>
+                    <p class="text-xs text-slate-600 leading-relaxed">Upload textbook pages, notes, or scanned PDFs to generate questions based on your exact classroom content.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pricing Section -->
+        <section id="pricing" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8 pt-8 border-t border-slate-200">
+            <div class="text-center space-y-2">
+                <span class="text-xs font-bold text-indigo-600 uppercase tracking-wider">Simple & Transparent Pricing</span>
+                <h2 class="text-2xl sm:text-3xl font-bold text-slate-900">Get Unlimited Access to Everything</h2>
+                <p class="text-xs sm:text-sm text-slate-500">Subscribe directly via Call or WhatsApp at +27 64 971 8513</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto items-stretch">
+                <!-- Weekly Plan -->
+                <div class="bg-white rounded-2xl border-2 border-indigo-100 p-8 flex flex-col justify-between space-y-6 shadow-sm hover:border-indigo-300 transition">
+                    <div class="space-y-4">
+                        <div class="space-y-1">
+                            <span class="text-[10px] uppercase font-bold text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-full">Flexible Pass</span>
+                            <h3 class="font-bold text-slate-800 text-xl pt-2">Weekly Pass</h3>
+                            <p class="text-xs text-slate-500">Full access for 7 days</p>
+                        </div>
+                        <div class="text-4xl font-extrabold text-slate-900">R50 <span class="text-xs font-normal text-slate-500">/ week</span></div>
+                        <ul class="text-xs text-slate-600 space-y-3 pt-2">
+                            <li class="flex items-center gap-2.5"><i class="fa-solid fa-circle-check text-emerald-500 text-sm"></i> <strong>Gets Everything</strong> - Unlimited Test Generations</li>
+                            <li class="flex items-center gap-2.5"><i class="fa-solid fa-circle-check text-emerald-500 text-sm"></i> Full Marking Memorandums & Guidelines</li>
+                            <li class="flex items-center gap-2.5"><i class="fa-solid fa-circle-check text-emerald-500 text-sm"></i> PDF & Print Export Ready</li>
+                            <li class="flex items-center gap-2.5"><i class="fa-solid fa-circle-check text-emerald-500 text-sm"></i> PDF / Notes / Image Upload Support</li>
+                            <li class="flex items-center gap-2.5"><i class="fa-solid fa-circle-check text-emerald-500 text-sm"></i> Interactive Online Test Mode</li>
+                        </ul>
+                    </div>
+                    <a href="https://wa.me/27649718513?text=Hi%2C%20I%20would%20like%20to%20subscribe%20to%20the%20R50%20Weekly%20Pass" target="_blank" class="w-full py-3 px-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl shadow transition text-center flex items-center justify-center gap-2">
+                        <i class="fa-brands fa-whatsapp text-sm"></i>
+                        <span>Subscribe via +27 64 971 8513</span>
+                    </a>
+                </div>
+
+                <!-- Monthly Plan -->
+                <div class="bg-gradient-to-b from-indigo-900 to-indigo-950 text-white rounded-2xl border-2 border-amber-400 p-8 flex flex-col justify-between space-y-6 shadow-xl relative">
+                    <div class="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-amber-400 text-indigo-950 text-[10px] font-extrabold px-3 py-1 rounded-full uppercase tracking-wider shadow-md">
+                        Best Value for Teachers
+                    </div>
+                    <div class="space-y-4 pt-2">
+                        <div class="space-y-1">
+                            <span class="text-[10px] uppercase font-bold text-amber-300 bg-amber-400/20 px-2.5 py-1 rounded-full">Full Monthly Pass</span>
+                            <h3 class="font-bold text-white text-xl pt-2">Monthly Pass</h3>
+                            <p class="text-xs text-indigo-200">Full access for 30 days</p>
+                        </div>
+                        <div class="text-4xl font-extrabold text-white">R170 <span class="text-xs font-normal text-indigo-300">/ month</span></div>
+                        <ul class="text-xs text-indigo-100 space-y-3 pt-2">
+                            <li class="flex items-center gap-2.5"><i class="fa-solid fa-circle-check text-amber-400 text-sm"></i> <strong>Gets Everything</strong> - Unlimited Test Generations</li>
+                            <li class="flex items-center gap-2.5"><i class="fa-solid fa-circle-check text-amber-400 text-sm"></i> Full Marking Memorandums & Guidelines</li>
+                            <li class="flex items-center gap-2.5"><i class="fa-solid fa-circle-check text-amber-400 text-sm"></i> PDF & Print Export Ready</li>
+                            <li class="flex items-center gap-2.5"><i class="fa-solid fa-circle-check text-amber-400 text-sm"></i> PDF / Notes / Image Upload Support</li>
+                            <li class="flex items-center gap-2.5"><i class="fa-solid fa-circle-check text-amber-400 text-sm"></i> Interactive Online Test Mode</li>
+                        </ul>
+                    </div>
+                    <a href="https://wa.me/27649718513?text=Hi%2C%20I%20would%20like%20to%20subscribe%20to%20the%20R170%20Monthly%20Pass" target="_blank" class="w-full py-3 px-4 bg-amber-400 hover:bg-amber-300 text-indigo-950 font-bold text-xs rounded-xl shadow-lg transition text-center flex items-center justify-center gap-2">
+                        <i class="fa-brands fa-whatsapp text-sm"></i>
+                        <span>Subscribe via +27 64 971 8513</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 border-t border-slate-200">
+            <div class="bg-indigo-900 text-white rounded-3xl p-6 sm:p-10 max-w-3xl mx-auto shadow-lg text-center space-y-6">
+                <div class="space-y-3">
+                    <span class="text-xs font-bold text-amber-400 uppercase tracking-wider">Direct Support & Access</span>
+                    <h2 class="text-2xl sm:text-3xl font-bold">Need Subscription or Help?</h2>
+                    <p class="text-xs sm:text-sm text-indigo-200 leading-relaxed max-w-xl mx-auto">
+                        Contact us directly via call or WhatsApp for quick account activation, subscription setups, or inquiries.
+                    </p>
+                </div>
+                
+                <!-- Direct Contact Cards -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-xl mx-auto text-left">
+                    <div class="flex items-center gap-3 bg-indigo-950/60 p-4 rounded-xl border border-indigo-800">
+                        <div class="w-10 h-10 rounded-lg bg-amber-400 text-indigo-950 flex items-center justify-center text-lg font-bold flex-shrink-0">
+                            <i class="fa-solid fa-phone"></i>
+                        </div>
+                        <div>
+                            <p class="text-[10px] uppercase tracking-wider text-indigo-300 font-semibold">Call Support Line</p>
+                            <a href="tel:+27649718513" class="text-base font-bold text-white hover:text-amber-300 transition">+27 64 971 8513</a>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-3 bg-indigo-950/60 p-4 rounded-xl border border-indigo-800">
+                        <div class="w-10 h-10 rounded-lg bg-emerald-500 text-white flex items-center justify-center text-lg font-bold flex-shrink-0">
+                            <i class="fa-brands fa-whatsapp"></i>
+                        </div>
+                        <div>
+                            <p class="text-[10px] uppercase tracking-wider text-indigo-300 font-semibold">WhatsApp Direct Line</p>
+                            <a href="https://wa.me/27649718513" target="_blank" class="text-base font-bold text-white hover:text-emerald-300 transition">+27 64 971 8513</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- MAIN APP VIEW (GATED BY LOGIN REQUIREMENT) -->
+    <main id="app-generator-view" class="hidden flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+        <!-- Left Sidebar: Form Controls -->
+        <section class="lg:col-span-4 space-y-5 no-print">
+            
+            <!-- Quick Presets -->
+            <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200/80">
+                <h2 id="lbl-presets-title" class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3 flex items-center gap-2">
+                    <i class="fa-solid fa-bolt text-amber-500"></i> Quick Presets
+                </h2>
+                <div class="grid grid-cols-2 gap-2">
+                    <button onclick="fillPreset('Physical Sciences', 'Waves, Sound & Light', 'Grade 10')" class="p-2.5 text-left border border-slate-200 rounded-xl hover:border-indigo-500 hover:bg-indigo-50/50 transition group">
+                        <div class="text-xs font-semibold text-slate-800 group-hover:text-indigo-600">Phys Sci Gr 10</div>
+                        <div class="text-[10px] text-slate-500 truncate">Waves & Light</div>
+                    </button>
+                    <button onclick="fillPreset('Life Sciences', 'Photosynthesis & Respiration', 'Grade 11')" class="p-2.5 text-left border border-slate-200 rounded-xl hover:border-indigo-500 hover:bg-indigo-50/50 transition group">
+                        <div class="text-xs font-semibold text-slate-800 group-hover:text-indigo-600">Life Sci Gr 11</div>
+                        <div class="text-[10px] text-slate-500 truncate">Photosynthesis</div>
+                    </button>
+                    <button onclick="fillPreset('Mathematics', 'Calculus & Functions', 'Grade 12')" class="p-2.5 text-left border border-slate-200 rounded-xl hover:border-indigo-500 hover:bg-indigo-50/50 transition group">
+                        <div class="text-xs font-semibold text-slate-800 group-hover:text-indigo-600">Maths Gr 12</div>
+                        <div class="text-[10px] text-slate-500 truncate">Calculus</div>
+                    </button>
+                    <button onclick="fillPreset('EMS', 'Financial Literacy & Accounting', 'Grade 9')" class="p-2.5 text-left border border-slate-200 rounded-xl hover:border-indigo-500 hover:bg-indigo-50/50 transition group">
+                        <div class="text-xs font-semibold text-slate-800 group-hover:text-indigo-600">EMS Gr 9</div>
+                        <div class="text-[10px] text-slate-500 truncate">Accounting</div>
+                    </button>
+                </div>
+            </div>
+
+            <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200/80 space-y-4">
+                <div class="border-b border-slate-100 pb-3 flex items-center justify-between">
+                    <h2 id="lbl-config-title" class="font-bold text-slate-800 text-base flex items-center gap-2">
+                        <i class="fa-solid fa-sliders text-indigo-600"></i> Test Setup
+                    </h2>
+                    <span id="lbl-setup-badge" class="text-[11px] font-medium bg-indigo-50 text-indigo-700 px-2 py-0.5 rounded-md">Curriculum Aligned</span>
+                </div>
+
+                <!-- Test Language / Taal Switcher -->
+                <div>
+                    <label id="lbl-language" class="block text-xs font-bold text-slate-700 mb-1.5">Language / Taal *</label>
+                    <div class="grid grid-cols-2 gap-2 bg-slate-100 p-1.5 rounded-xl border border-slate-200/60">
+                        <button type="button" id="btn-select-en" onclick="setLanguage('en')" class="py-2 px-3 text-xs font-bold rounded-lg transition bg-indigo-600 text-white shadow-sm flex items-center justify-center gap-1.5">
+                            <span>🇬🇧 English</span>
+                        </button>
+                        <button type="button" id="btn-select-af" onclick="setLanguage('af')" class="py-2 px-3 text-xs font-bold rounded-lg transition text-slate-600 hover:text-slate-900 flex items-center justify-center gap-1.5">
+                            <span>🇿🇦 Afrikaans</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Subject -->
+                <div>
+                    <label id="lbl-subject" class="block text-xs font-bold text-slate-700 mb-1">Subject / Vak *</label>
+                    <input type="text" id="subject" placeholder="e.g. Mathematics, Life Sciences, English" class="w-full text-sm px-3.5 py-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition">
+                </div>
+
+                <!-- Topic -->
+                <div>
+                    <label id="lbl-topic" class="block text-xs font-bold text-slate-700 mb-1">Topic (optional)</label>
+                    <input type="text" id="topic" placeholder="e.g. Euclidean Geometry, Chemical Bonding" class="w-full text-sm px-3.5 py-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition">
+                </div>
+
+                <!-- Grade & Difficulty Row -->
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label id="lbl-grade" class="block text-xs font-bold text-slate-700 mb-1">Grade Level</label>
+                        <select id="grade" class="w-full text-sm px-3 py-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition bg-white">
+                            <option value="Grade 12">Grade 12</option>
+                            <option value="Grade 11">Grade 11</option>
+                            <option value="Grade 10">Grade 10</option>
+                            <option value="Grade 9">Grade 9</option>
+                            <option value="Grade 8">Grade 8</option>
+                            <option value="Grade 7">Grade 7</option>
+                            <option value="Grade 4-6">Grade 4 - 6</option>
+                            <option value="Grade 1-3">Grade 1 - 3</option>
+                            <option value="Tertiary">Tertiary / Adult</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label id="lbl-difficulty" class="block text-xs font-bold text-slate-700 mb-1">Difficulty</label>
+                        <select id="difficulty" class="w-full text-sm px-3 py-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition bg-white">
+                            <option value="Standard Exam">Standard Exam</option>
+                            <option value="Easy">Foundation (Easy)</option>
+                            <option value="Challenging">Advanced (Hard)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Questions Count & Test Type -->
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label id="lbl-questions" class="block text-xs font-bold text-slate-700 mb-1">Questions</label>
+                        <select id="question-count" class="w-full text-sm px-3 py-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition bg-white">
+                            <option value="5">5 Questions</option>
+                            <option value="10" selected>10 Questions</option>
+                            <option value="15">15 Questions</option>
+                            <option value="20">20 Questions</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label id="lbl-test-type" class="block text-xs font-bold text-slate-700 mb-1">Format</label>
+                        <select id="test-type" class="w-full text-sm px-3 py-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition bg-white">
+                            <option value="Mixed">Mixed (MCQ & Written)</option>
+                            <option value="Multiple Choice">Multiple Choice Only</option>
+                            <option value="Short Answers">Short Answers Only</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- File Upload -->
+                <div>
+                    <label id="lbl-upload" class="block text-xs font-bold text-slate-700 mb-1">Upload Source Material (optional)</label>
+                    <div class="relative border-2 border-dashed border-slate-200 rounded-xl p-3 text-center hover:border-indigo-400 transition bg-slate-50/50">
+                        <input type="file" id="file-input" onchange="handleFileSelect(event)" accept="image/*,.pdf,.txt" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
+                        <div class="flex flex-col items-center justify-center space-y-1">
+                            <i class="fa-solid fa-cloud-arrow-up text-indigo-500 text-lg"></i>
+                            <p class="text-xs text-slate-600 font-medium">Click or drag image, PDF or notes here</p>
+                            <p class="text-[10px] text-slate-400">PNG, JPG, PDF, TXT up to 5MB</p>
+                        </div>
+                    </div>
+                    
+                    <!-- File Preview Badge -->
+                    <div id="uploaded-file-preview" class="hidden mt-2 p-2 bg-indigo-50 border border-indigo-100 rounded-lg flex items-center justify-between">
+                        <div class="flex items-center gap-2 overflow-hidden">
+                            <i class="fa-solid fa-file-lines text-indigo-600 text-xs"></i>
+                            <span id="file-name" class="text-xs font-medium text-indigo-900 truncate">filename.pdf</span>
+                        </div>
+                        <button onclick="clearUploadedFile()" class="text-slate-400 hover:text-red-500 p-1">
+                            <i class="fa-solid fa-xmark text-xs"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Generate Button -->
+                <button id="btn-generate" onclick="generateTest()" class="w-full py-3.5 px-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm rounded-xl shadow-md shadow-indigo-200 transition duration-200 flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i>
+                    <span id="btn-text">Generate Test</span>
+                </button>
+            </div>
+        </section>
+
+        <section class="lg:col-span-8 flex flex-col space-y-4">
+
+            <!-- Initial Empty State -->
+            <div id="empty-state" class="bg-white rounded-2xl p-10 border border-slate-200/80 shadow-sm flex flex-col items-center justify-center text-center flex-1 my-auto">
+                <div class="w-16 h-16 bg-indigo-50 text-indigo-600 rounded-2xl flex items-center justify-center text-2xl mb-4 shadow-inner">
+                    <i class="fa-solid fa-file-pen"></i>
+                </div>
+                <h3 id="empty-title" class="text-lg font-bold text-slate-800 mb-1">Ready to Create a Test</h3>
+                <p id="empty-desc" class="text-sm text-slate-500 max-w-md mb-6">Select a subject or quick preset, optionally attach notes, and let Crown AI build a complete test with marking memorandum in seconds.</p>
+                <div class="flex flex-wrap gap-3 justify-center text-xs text-slate-600">
+                    <span class="bg-slate-100 px-3 py-1.5 rounded-lg flex items-center gap-1.5"><i class="fa-solid fa-check text-indigo-600"></i> Curriculum Aligned</span>
+                    <span class="bg-slate-100 px-3 py-1.5 rounded-lg flex items-center gap-1.5"><i class="fa-solid fa-check text-indigo-600"></i> Full Memorandum</span>
+                    <span class="bg-slate-100 px-3 py-1.5 rounded-lg flex items-center gap-1.5"><i class="fa-solid fa-check text-indigo-600"></i> Interactive Test Mode</span>
+                </div>
+            </div>
+
+            <!-- Loading Spinner State -->
+            <div id="loading-state" class="hidden bg-white rounded-2xl p-12 border border-slate-200/80 shadow-sm flex flex-col items-center justify-center text-center flex-1 my-auto">
+                <div class="relative w-16 h-16 mb-4">
+                    <div class="absolute inset-0 rounded-full border-4 border-indigo-100"></div>
+                    <div class="absolute inset-0 rounded-full border-4 border-indigo-600 border-t-transparent animate-spin"></div>
+                    <div class="absolute inset-0 flex items-center justify-center text-indigo-600 font-bold text-xs">
+                        <i class="fa-solid fa-crown"></i>
+                    </div>
+                </div>
+                <h3 id="loading-title" class="text-lg font-bold text-slate-800 mb-1">Generating Test & Memorandum...</h3>
+                <p id="loading-desc" class="text-xs text-slate-500 max-w-sm">Crafting questions, mark allocations, and detailed solutions according to curriculum standards.</p>
+            </div>
+
+            <!-- Test Content View -->
+            <div id="test-container" class="hidden flex-1 flex flex-col space-y-4">
+                
+                <!-- Action Header Bar -->
+                <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-200/80 flex flex-wrap items-center justify-between gap-3 no-print">
+                    <div class="flex items-center gap-2">
+                        <button onclick="switchView('paper')" id="tab-paper" class="px-3.5 py-2 text-xs font-bold rounded-xl bg-indigo-50 text-indigo-700 transition flex items-center gap-1.5">
+                            <i class="fa-solid fa-file-lines"></i> <span id="lbl-tab-paper">Question Paper</span>
+                        </button>
+                        <button onclick="switchView('interactive')" id="tab-interactive" class="px-3.5 py-2 text-xs font-bold rounded-xl text-slate-600 hover:bg-slate-100 transition flex items-center gap-1.5">
+                            <i class="fa-solid fa-laptop-code"></i> <span id="lbl-tab-interactive">Interactive Mode</span>
+                        </button>
+                    </div>
+
+                    <div class="flex flex-wrap items-center gap-2">
+                        <button onclick="downloadTestPDF()" id="btn-dl-test-pdf" class="px-3 py-2 text-xs font-semibold rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white transition flex items-center gap-1.5 shadow-sm">
+                            <i class="fa-solid fa-file-pdf"></i> <span id="lbl-btn-dl-test">Download Test PDF</span>
+                        </button>
+                        <button onclick="downloadMemoPDF()" id="btn-dl-memo-pdf" class="px-3 py-2 text-xs font-semibold rounded-xl bg-amber-500 hover:bg-amber-600 text-indigo-950 transition flex items-center gap-1.5 shadow-sm">
+                            <i class="fa-solid fa-file-pdf"></i> <span id="lbl-btn-dl-memo">Download Memo PDF</span>
+                        </button>
+                        <button onclick="toggleMemo()" id="btn-toggle-memo" class="px-3 py-2 text-xs font-semibold rounded-xl border border-slate-200 text-slate-700 hover:bg-slate-50 transition flex items-center gap-1.5">
+                            <i class="fa-solid fa-key text-amber-500"></i> <span id="lbl-btn-memo">Show Memorandum</span>
+                        </button>
+                        <button onclick="copyTestText()" class="px-3 py-2 text-xs font-semibold rounded-xl border border-slate-200 text-slate-700 hover:bg-slate-50 transition flex items-center gap-1.5">
+                            <i class="fa-solid fa-copy text-indigo-500"></i> <span id="lbl-btn-copy">Copy</span>
+                        </button>
+                        <button onclick="printTest()" class="px-3 py-2 text-xs font-semibold rounded-xl bg-slate-900 hover:bg-black text-white transition flex items-center gap-1.5 shadow-sm">
+                            <i class="fa-solid fa-print"></i> <span id="lbl-btn-print">Print</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div id="paper-view" class="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200/80 shadow-sm space-y-6">
+                    <!-- Test Header Box -->
+                    <div class="border-b-2 border-slate-900 pb-4">
+                        <div class="flex justify-between items-start mb-2">
+                            <div>
+                                <h2 id="paper-title" class="text-xl sm:text-2xl font-bold text-slate-900 uppercase tracking-tight">NATIONAL SENIOR CERTIFICATE TEST</h2>
+                                <p id="paper-subtitle" class="text-sm font-semibold text-indigo-700">SUBJECT & TOPIC HERE</p>
+                            </div>
+                            <div class="text-right">
+                                <div id="paper-grade" class="text-xs font-bold uppercase tracking-wider text-slate-500">GRADE 11</div>
+                                <div id="paper-marks" class="text-sm font-extrabold text-slate-900 mt-1">TOTAL: 25 MARKS</div>
+                                <div id="paper-time" class="text-xs text-slate-500">TIME: 30 MINUTES</div>
+                            </div>
+                        </div>
+                        <!-- Instructions Box -->
+                        <div class="mt-4 p-3 bg-slate-50 rounded-xl border border-slate-200 text-xs text-slate-600 space-y-1">
+                            <p class="font-bold text-slate-800" id="lbl-instructions-head">INSTRUCTIONS & INFORMATION:</p>
+                            <ol class="list-decimal list-inside space-y-0.5" id="lbl-instructions-list">
+                                <li>Answer ALL questions in the spaces provided.</li>
+                                <li>Number the answers correctly according to the numbering system used in this question paper.</li>
+                                <li>Write neatly and legibly.</li>
+                            </ol>
+                        </div>
+                    </div>
+
+                    <!-- Question Paper Render Container -->
+                    <div id="questions-render" class="space-y-6">
+                        <!-- Dynamic questions go here -->
+                    </div>
+
+                    <!-- Memorandum Section (Collapsible) -->
+                    <div id="memo-container" class="hidden border-t-2 border-amber-400 pt-6 mt-8 space-y-4">
+                        <div class="bg-amber-50 p-4 rounded-xl border border-amber-200 flex items-center justify-between">
+                            <div>
+                                <h3 class="font-bold text-amber-900 text-base" id="lbl-memo-head">MARKING MEMORANDUM / NASIENMEMORANDUM</h3>
+                                <p class="text-xs text-amber-700">Official solutions and mark allocation breakdown</p>
+                            </div>
+                            <span class="text-xs bg-amber-200 text-amber-900 font-bold px-2.5 py-1 rounded-lg">CONFIDENTIAL</span>
+                        </div>
+
+                        <div id="memo-render" class="space-y-4 text-sm">
+                            <!-- Dynamic memo items go here -->
+                        </div>
+                    </div>
+                </div>
+
+                <div id="interactive-view" class="hidden bg-white rounded-2xl p-6 sm:p-8 border border-slate-200/80 shadow-sm space-y-6">
+                    
+                    <!-- Interactive Header with Timer -->
+                    <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+                        <div>
+                            <span class="text-xs font-bold uppercase text-indigo-600 tracking-wider">Interactive Mode</span>
+                            <h3 id="interactive-title" class="font-bold text-slate-900 text-lg">Online Assessment</h3>
+                        </div>
+                        <div class="bg-indigo-50 border border-indigo-100 px-4 py-2 rounded-xl flex items-center gap-2 text-indigo-900 font-mono font-bold text-sm">
+                            <i class="fa-regular fa-clock text-indigo-600"></i>
+                            <span id="timer-display">30:00</span>
+                        </div>
+                    </div>
+
+                    <!-- Interactive Questions Form -->
+                    <div id="interactive-render" class="space-y-6">
+                        <!-- Dynamic interactive questions go here -->
+                    </div>
+
+                    <!-- Interactive Submit Action -->
+                    <div class="pt-4 border-t border-slate-100 flex justify-end">
+                        <button onclick="submitInteractiveTest()" class="py-3 px-6 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-md shadow-emerald-200 transition flex items-center gap-2 text-sm">
+                            <i class="fa-solid fa-paper-plane"></i>
+                            <span id="lbl-btn-submit">Submit Answers</span>
+                        </button>
+                    </div>
+
+                    <!-- Interactive Results Summary -->
+                    <div id="interactive-results" class="hidden p-6 bg-slate-50 border border-slate-200 rounded-2xl space-y-4">
+                        <div class="flex items-center justify-between">
+                            <h4 class="font-bold text-slate-900 text-base flex items-center gap-2">
+                                <i class="fa-solid fa-square-poll-vertical text-indigo-600"></i> Assessment Score
+                            </h4>
+                            <span id="results-score-badge" class="text-lg font-black bg-indigo-600 text-white px-3.5 py-1 rounded-xl">0 / 0</span>
+                        </div>
+                        <p id="results-feedback" class="text-xs text-slate-600">Your test answers have been auto-graded against the memorandum below.</p>
+                        <div id="interactive-breakdown" class="space-y-3 pt-2"></div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <!-- LOGIN / AUTH MODAL -->
+    <div id="auth-modal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100 space-y-5 relative">
+            <button onclick="closeAuthModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 p-1">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+
+            <!-- Auth Header -->
+            <div class="text-center space-y-1">
+                <div class="w-12 h-12 bg-indigo-50 text-indigo-600 rounded-2xl flex items-center justify-center text-xl font-bold mx-auto mb-2">
+                    <i class="fa-solid fa-lock"></i>
+                </div>
+                <h3 id="auth-modal-title" class="text-lg font-bold text-slate-900">Sign In Required</h3>
+                <p id="auth-modal-subtitle" class="text-xs text-slate-500">Enter your Username & PIN to access the generator.</p>
+            </div>
+
+            <!-- Login Form -->
+            <form onsubmit="handleAuthSubmit(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Username / Gebruikersnaam</label>
+                    <input type="text" id="auth-username" required placeholder="Enter username" class="w-full text-xs px-3.5 py-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">PIN / Password</label>
+                    <input type="password" id="auth-password" required placeholder="••••" class="w-full text-xs px-3.5 py-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none">
+                </div>
+
+                <button type="submit" class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl shadow-md transition flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-right-to-bracket"></i>
+                    <span id="btn-auth-text">Log In & Continue</span>
+                </button>
+            </form>
         </div>
     </div>
 
-    <div class="btn-container">
-        <button class="download-btn" onclick="downloadPDF()">Download Memorandum PDF</button>
+    <!-- ADMIN ONLY MODAL (CREATE ACCOUNTS, CHANGE PIN & BACKUP/RESTORE) -->
+    <div id="admin-modal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-xl w-full p-6 shadow-2xl border border-slate-100 space-y-6 relative max-h-[90vh] overflow-y-auto">
+            <button onclick="closeAdminModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 p-1">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+
+            <!-- Admin Modal Header -->
+            <div class="flex items-center gap-3 border-b border-slate-100 pb-4">
+                <div class="w-10 h-10 bg-amber-100 text-amber-900 rounded-xl flex items-center justify-center text-lg font-bold">
+                    <i class="fa-solid fa-user-gear"></i>
+                </div>
+                <div>
+                    <h3 class="text-base font-bold text-slate-900">Admin Control Panel</h3>
+                    <p class="text-xs text-slate-500">Manage user accounts, persistence & admin security</p>
+                </div>
+            </div>
+
+            <!-- Admin Section 1: Create New User Account -->
+            <div class="space-y-3 bg-slate-50 p-4 rounded-xl border border-slate-200/80">
+                <h4 class="text-xs font-bold uppercase tracking-wider text-indigo-900 flex items-center gap-1.5">
+                    <i class="fa-solid fa-user-plus text-indigo-600"></i> Create New User Account
+                </h4>
+                <form onsubmit="handleCreateAccount(event)" class="grid grid-cols-1 sm:grid-cols-5 gap-2">
+                    <div class="sm:col-span-2">
+                        <label class="block text-[11px] font-bold text-slate-700 mb-1">Username</label>
+                        <input type="text" id="new-user-name" required placeholder="e.g. teacher1" class="w-full text-xs px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none bg-white">
+                    </div>
+                    <div class="sm:col-span-2">
+                        <label class="block text-[11px] font-bold text-slate-700 mb-1">PIN</label>
+                        <input type="text" id="new-user-pin" required placeholder="e.g. 1234" class="w-full text-xs px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none bg-white">
+                    </div>
+                    <div class="sm:col-span-1 flex items-end">
+                        <button type="submit" class="w-full py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-lg shadow transition">
+                            Add
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Admin Section 2: Account List -->
+            <div class="space-y-3">
+                <div class="flex items-center justify-between">
+                    <h4 class="text-xs font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
+                        <i class="fa-solid fa-users text-slate-600"></i> Saved Accounts (Saved Permanently)
+                    </h4>
+                    <span id="account-count-badge" class="text-[10px] bg-slate-100 text-slate-700 px-2 py-0.5 rounded-md font-bold">0 Accounts</span>
+                </div>
+                <div id="admin-user-list" class="space-y-2 max-h-44 overflow-y-auto pr-1">
+                    <!-- Dynamic User Rows -->
+                </div>
+            </div>
+
+            <!-- Admin Section 3: Backup & Restore Account Database -->
+            <div class="space-y-3 bg-emerald-50/60 p-4 rounded-xl border border-emerald-200/70">
+                <h4 class="text-xs font-bold uppercase tracking-wider text-emerald-900 flex items-center gap-1.5">
+                    <i class="fa-solid fa-database text-emerald-700"></i> Account Data Backup & Export
+                </h4>
+                <p class="text-[11px] text-emerald-800">Accounts are automatically saved permanently in your browser. You can also export a backup file to restore on any device.</p>
+                <div class="flex flex-wrap gap-2 pt-1">
+                    <button onclick="exportAccountsBackup()" class="py-2 px-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-lg shadow transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-download"></i> Export Backup JSON
+                    </button>
+                    <label class="py-2 px-3 bg-slate-800 hover:bg-slate-900 text-white font-bold text-xs rounded-lg shadow transition flex items-center gap-1.5 cursor-pointer">
+                        <i class="fa-solid fa-upload"></i> Restore Backup JSON
+                        <input type="file" accept=".json" onchange="importAccountsBackup(event)" class="hidden">
+                    </label>
+                </div>
+            </div>
+
+            <!-- Admin Section 4: Change Admin PIN -->
+            <div class="space-y-3 bg-amber-50/60 p-4 rounded-xl border border-amber-200/70">
+                <h4 class="text-xs font-bold uppercase tracking-wider text-amber-900 flex items-center gap-1.5">
+                    <i class="fa-solid fa-key text-amber-700"></i> Change Admin PIN
+                </h4>
+                <form onsubmit="handleChangeAdminPin(event)" class="grid grid-cols-1 sm:grid-cols-5 gap-2">
+                    <div class="sm:col-span-2">
+                        <label class="block text-[11px] font-bold text-slate-700 mb-1">Current PIN</label>
+                        <input type="password" id="admin-current-pin" required placeholder="••••" class="w-full text-xs px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-amber-500 outline-none bg-white">
+                    </div>
+                    <div class="sm:col-span-2">
+                        <label class="block text-[11px] font-bold text-slate-700 mb-1">New PIN</label>
+                        <input type="password" id="admin-new-pin" required placeholder="••••" class="w-full text-xs px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-amber-500 outline-none bg-white">
+                    </div>
+                    <div class="sm:col-span-1 flex items-end">
+                        <button type="submit" class="w-full py-2 bg-amber-500 hover:bg-amber-600 text-indigo-950 font-bold text-xs rounded-lg shadow transition">
+                            Update
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- GENERAL NOTICE MODAL -->
+    <div id="custom-modal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl border border-slate-100 text-center space-y-4 relative">
+            <div class="w-12 h-12 bg-indigo-50 text-indigo-600 rounded-2xl flex items-center justify-center text-xl font-bold mx-auto">
+                <i class="fa-solid fa-circle-info"></i>
+            </div>
+            <h3 id="modal-title" class="text-base font-bold text-slate-900">Notice</h3>
+            <p id="modal-message" class="text-xs text-slate-600 leading-relaxed">Notification content goes here...</p>
+            <button onclick="closeModal()" class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl shadow transition">
+                OK / Close
+            </button>
+        </div>
     </div>
 
     <script>
-        function downloadPDF() {
-            const element = document.getElementById('memo-content');
-            const options = {
-                margin:       10,
-                filename:     'step_by_step_memo.pdf',
-                image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2, useCORS: true, letterRendering: true },
-                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
-                pagebreak:    { mode: ['avoid-all', 'css', 'legacy'] }
+        let currentLanguage = 'en';
+        let generatedTest = null;
+        let uploadedFilePart = null;
+        let uploadedFileText = '';
+        let timerInterval = null;
+        let timeRemainingSeconds = 1800;
+
+        // AUTHENTICATION & PERMANENT ACCOUNTS STATE
+        let isLoggedIn = false;
+        let currentUser = null;
+
+        const ACCOUNTS_STORAGE_KEY = 'crown_accounts_db_v2';
+
+        // Ensure browser persistent storage if supported
+        if (navigator.storage && navigator.storage.persist) {
+            navigator.storage.persist().then(persisted => {
+                console.log("Persistent storage enabled:", persisted);
+            });
+        }
+
+        // Account Store Persistence
+        function getStoredAccounts() {
+            const data = localStorage.getItem(ACCOUNTS_STORAGE_KEY) || localStorage.getItem('crown_accounts_db');
+            let accounts = [];
+            
+            if (data) {
+                try {
+                    accounts = JSON.parse(data);
+                } catch (e) {
+                    console.error("Error loading accounts from storage:", e);
+                }
+            }
+
+            // Default fallback if no admin account exists at all
+            if (!accounts || !Array.isArray(accounts) || accounts.length === 0) {
+                accounts = [
+                    { username: 'colin', displayName: 'Colin (Admin)', pin: '3692', isAdmin: true },
+                    { username: 'teacher', displayName: 'Teacher Account', pin: '1234', isAdmin: false }
+                ];
+                saveAccounts(accounts);
+            } else {
+                // Guarantee primary admin account exists
+                const hasAdmin = accounts.some(a => a.isAdmin);
+                if (!hasAdmin) {
+                    accounts.unshift({ username: 'colin', displayName: 'Colin (Admin)', pin: '3692', isAdmin: true });
+                    saveAccounts(accounts);
+                }
+            }
+
+            return accounts;
+        }
+
+        function saveAccounts(accounts) {
+            try {
+                localStorage.setItem(ACCOUNTS_STORAGE_KEY, JSON.stringify(accounts));
+                // Backup legacy key as well
+                localStorage.setItem('crown_accounts_db', JSON.stringify(accounts));
+            } catch (err) {
+                console.error("Failed to save accounts to localStorage:", err);
+            }
+        }
+
+        function checkAuthGuard() {
+            if (!isLoggedIn) {
+                openAuthModal('login');
+                return false;
+            }
+            return true;
+        }
+
+        function openAuthModal(mode = 'login') {
+            document.getElementById('auth-modal-title').innerText = "Sign In Required";
+            document.getElementById('auth-modal-subtitle').innerText = "Enter your Username & PIN to access the generator.";
+            document.getElementById('btn-auth-text').innerText = "Log In & Continue";
+            document.getElementById('auth-modal').classList.remove('hidden');
+        }
+
+        function closeAuthModal() {
+            document.getElementById('auth-modal').classList.add('hidden');
+        }
+
+        function openAdminModal() {
+            if (!currentUser || !currentUser.isAdmin) return;
+            renderAdminUserList();
+            document.getElementById('admin-modal').classList.remove('hidden');
+        }
+
+        function closeAdminModal() {
+            document.getElementById('admin-modal').classList.add('hidden');
+        }
+
+        function renderAdminUserList() {
+            const accounts = getStoredAccounts();
+            const listContainer = document.getElementById('admin-user-list');
+            const countBadge = document.getElementById('account-count-badge');
+            
+            if (countBadge) {
+                countBadge.innerText = `${accounts.length} ${accounts.length === 1 ? 'Account' : 'Accounts'}`;
+            }
+
+            listContainer.innerHTML = '';
+
+            accounts.forEach((acc) => {
+                const item = document.createElement('div');
+                item.className = "flex items-center justify-between p-2.5 bg-slate-50 rounded-xl border border-slate-200 text-xs";
+                
+                const roleBadge = acc.isAdmin 
+                    ? '<span class="bg-amber-100 text-amber-900 font-bold text-[10px] px-2 py-0.5 rounded-md ml-2">ADMIN</span>' 
+                    : '<span class="bg-slate-200 text-slate-700 font-medium text-[10px] px-2 py-0.5 rounded-md ml-2">USER</span>';
+
+                item.innerHTML = `
+                    <div class="flex items-center gap-2 overflow-hidden">
+                        <i class="fa-solid fa-user text-slate-400"></i>
+                        <span class="font-bold text-slate-800 truncate">${acc.displayName || acc.username}</span>
+                        <span class="text-slate-400 font-mono text-[11px] flex-shrink-0">(PIN: ${acc.pin})</span>
+                        ${roleBadge}
+                    </div>
+                    ${!acc.isAdmin ? `
+                        <button onclick="deleteAccount('${acc.username}')" class="text-slate-400 hover:text-red-500 transition px-2 py-1 flex-shrink-0" title="Delete User">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                    ` : '<span class="text-[10px] text-slate-400 font-semibold px-2 flex-shrink-0">Primary</span>'}
+                `;
+                listContainer.appendChild(item);
+            });
+        }
+
+        function handleCreateAccount(e) {
+            e.preventDefault();
+            const nameInput = document.getElementById('new-user-name').value.trim();
+            const pinInput = document.getElementById('new-user-pin').value.trim();
+
+            if (!nameInput || !pinInput) {
+                showModal("Input Error", "Please provide both username and PIN.");
+                return;
+            }
+
+            const accounts = getStoredAccounts();
+            if (accounts.some(a => a.username.toLowerCase() === nameInput.toLowerCase())) {
+                showModal("Account Exists", "An account with this username already exists.");
+                return;
+            }
+
+            accounts.push({
+                username: nameInput.toLowerCase(),
+                displayName: nameInput,
+                pin: pinInput,
+                isAdmin: false,
+                createdAt: new Date().toISOString()
+            });
+
+            saveAccounts(accounts);
+            document.getElementById('new-user-name').value = '';
+            document.getElementById('new-user-pin').value = '';
+            renderAdminUserList();
+            showModal("Account Saved Forever", `User account '${nameInput}' created and saved permanently in database!`);
+        }
+
+        function deleteAccount(username) {
+            let accounts = getStoredAccounts();
+            accounts = accounts.filter(a => a.username.toLowerCase() !== username.toLowerCase() || a.isAdmin);
+            saveAccounts(accounts);
+            renderAdminUserList();
+            showModal("Account Deleted", `User '${username}' has been removed.`);
+        }
+
+        function handleChangeAdminPin(e) {
+            e.preventDefault();
+            const currentPin = document.getElementById('admin-current-pin').value.trim();
+            const newPin = document.getElementById('admin-new-pin').value.trim();
+
+            const accounts = getStoredAccounts();
+            const adminAcc = accounts.find(a => a.isAdmin);
+
+            if (!adminAcc || adminAcc.pin !== currentPin) {
+                showModal("Authentication Failed", "Incorrect current Admin PIN.");
+                return;
+            }
+
+            adminAcc.pin = newPin;
+            saveAccounts(accounts);
+            document.getElementById('admin-current-pin').value = '';
+            document.getElementById('admin-new-pin').value = '';
+            renderAdminUserList();
+            showModal("PIN Updated", "Admin PIN updated and saved successfully!");
+        }
+
+        function exportAccountsBackup() {
+            const accounts = getStoredAccounts();
+            const jsonStr = JSON.stringify(accounts, null, 2);
+            const blob = new Blob([jsonStr], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `crown_accounts_backup_${new Date().toISOString().slice(0, 10)}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        function importAccountsBackup(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const imported = JSON.parse(e.target.result);
+                    if (Array.isArray(imported) && imported.length > 0) {
+                        saveAccounts(imported);
+                        renderAdminUserList();
+                        showModal("Backup Restored", "Account database successfully restored!");
+                    } else {
+                        showModal("Invalid File", "Uploaded backup file is invalid or empty.");
+                    }
+                } catch (err) {
+                    showModal("Import Error", "Failed to parse JSON backup file.");
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function resetGenerator() {
+            document.getElementById('subject').value = '';
+            document.getElementById('topic').value = '';
+            document.getElementById('grade').selectedIndex = 0;
+            document.getElementById('difficulty').selectedIndex = 0;
+            document.getElementById('question-count').selectedIndex = 1;
+            document.getElementById('test-type').selectedIndex = 0;
+            clearUploadedFile();
+            
+            generatedTest = null;
+            document.getElementById('test-container').classList.add('hidden');
+            document.getElementById('loading-state').classList.add('hidden');
+            document.getElementById('empty-state').classList.remove('hidden');
+        }
+
+        function handleAuthSubmit(e) {
+            e.preventDefault();
+            const usernameInput = document.getElementById('auth-username').value.trim();
+            const passwordInput = document.getElementById('auth-password').value.trim();
+            
+            const accounts = getStoredAccounts();
+            const matchedAccount = accounts.find(a => 
+                a.username.toLowerCase() === usernameInput.toLowerCase() && a.pin === passwordInput
+            );
+
+            if (matchedAccount) {
+                isLoggedIn = true;
+                currentUser = {
+                    username: matchedAccount.username,
+                    name: matchedAccount.displayName || matchedAccount.username,
+                    isAdmin: !!matchedAccount.isAdmin
+                };
+                updateAuthUI();
+                resetGenerator();
+                closeAuthModal();
+                navigateToGenerator();
+            } else {
+                showModal("Login Failed", "Invalid Username or PIN. Please try again.");
+            }
+        }
+
+        function handleLogout() {
+            isLoggedIn = false;
+            currentUser = null;
+            updateAuthUI();
+            showLandingPage();
+            showModal("Logged Out", "You have successfully logged out.");
+        }
+
+        function updateAuthUI() {
+            const loggedOutBtn = document.getElementById('auth-header-logged-out');
+            const loggedInView = document.getElementById('auth-header-logged-in');
+            const userNameEl = document.getElementById('user-display-name');
+            const geminiBadge = document.getElementById('admin-gemini-badge');
+            const adminBtn = document.getElementById('admin-panel-btn');
+
+            if (isLoggedIn && currentUser) {
+                loggedOutBtn.classList.add('hidden');
+                loggedInView.classList.remove('hidden');
+                userNameEl.innerText = currentUser.name || "Teacher Account";
+                
+                if (currentUser.isAdmin) {
+                    geminiBadge.classList.remove('hidden');
+                    if (adminBtn) adminBtn.classList.remove('hidden');
+                } else {
+                    geminiBadge.classList.add('hidden');
+                    if (adminBtn) adminBtn.classList.add('hidden');
+                }
+            } else {
+                loggedOutBtn.classList.remove('hidden');
+                loggedInView.classList.add('hidden');
+                geminiBadge.classList.add('hidden');
+                if (adminBtn) adminBtn.classList.add('hidden');
+            }
+        }
+
+        function showLandingPage() {
+            document.getElementById('landing-page').classList.remove('hidden');
+            document.getElementById('app-generator-view').classList.add('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function navigateToGenerator() {
+            if (!checkAuthGuard()) return;
+
+            document.getElementById('landing-page').classList.add('hidden');
+            document.getElementById('app-generator-view').classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function scrollToSection(id) {
+            if (document.getElementById('landing-page').classList.contains('hidden')) {
+                showLandingPage();
+            }
+            setTimeout(() => {
+                const el = document.getElementById(id);
+                if (el) el.scrollIntoView({ behavior: 'smooth' });
+            }, 100);
+        }
+
+        const translations = {
+            en: {
+                presetsTitle: "Quick Presets",
+                configTitle: "Test Setup",
+                languageLbl: "Language / Taal *",
+                subjectLbl: "Subject / Vak *",
+                subjectPlaceholder: "e.g. Mathematics, Life Sciences, English",
+                topicLbl: "Topic (optional)",
+                topicPlaceholder: "e.g. Euclidean Geometry, Chemical Bonding",
+                gradeLbl: "Grade Level",
+                difficultyLbl: "Difficulty",
+                questionsLbl: "Questions",
+                testTypeLbl: "Format",
+                uploadLbl: "Upload Source Material (optional)",
+                uploadText: "Click or drag image, PDF or notes here",
+                generateBtn: "Generate Test",
+                generatingBtn: "Generating...",
+                emptyTitle: "Ready to Create a Test",
+                emptyDesc: "Select a subject or quick preset, optionally attach notes, and let Crown AI build a complete test with marking memorandum in seconds.",
+                loadingTitle: "Generating Test & Memorandum...",
+                loadingDesc: "Crafting questions, mark allocations, and detailed solutions according to curriculum standards.",
+                tabPaper: "Question Paper",
+                tabInteractive: "Interactive Mode",
+                dlTestBtn: "Download Test PDF",
+                dlMemoBtn: "Download Memo PDF",
+                showMemo: "Show Memorandum",
+                hideMemo: "Hide Memorandum",
+                copy: "Copy",
+                print: "Print",
+                instructionsHead: "INSTRUCTIONS & INFORMATION:",
+                instructions1: "Answer ALL questions in the spaces provided.",
+                instructions2: "Number the answers correctly according to the numbering system used in this question paper.",
+                instructions3: "Write neatly and legibly.",
+                memoHead: "MARKING MEMORANDUM / NASIENMEMORANDUM",
+                submitBtn: "Submit Answers",
+                noticeSubjectRequired: "Please enter a subject before generating the test.",
+                testCopiedNotice: "Test paper and memorandum copied to clipboard!"
+            },
+            af: {
+                presetsTitle: "Vinnige Keuses",
+                configTitle: "Toets Opstelling",
+                languageLbl: "Taal / Language *",
+                subjectLbl: "Vak *",
+                subjectPlaceholder: "bv. Wiskunde, Lewenswetenskappe, Afrikaans",
+                topicLbl: "Onderwerp (opsioneel)",
+                topicPlaceholder: "bv. Euklidiese Meetkunde, Chemiese Binding",
+                gradeLbl: "Graadvlak",
+                difficultyLbl: "Moeilikheidsgraad",
+                questionsLbl: "Vrae",
+                testTypeLbl: "Formaat",
+                uploadLbl: "Laai Bronmateriaal Op (opsioneel)",
+                uploadText: "Klik of sleep prent, PDF of notas hierheen",
+                generateBtn: "Genereer Toets",
+                generatingBtn: "Besig om te genereer...",
+                emptyTitle: "Gereed om 'n Toets te Skep",
+                emptyDesc: "Kies 'n vak of vinnige opsie, voeg opsioneel notas by, en laat Crown AI 'n volledige toets met nasienmemorandum binne sekondes bou.",
+                loadingTitle: "Genereer Toets & Memorandum...",
+                loadingDesc: "Opstel van vrae, puntetoekennings en gedetailleerde oplossings volgens kurrikulum-standaarde.",
+                tabPaper: "Vraestel",
+                tabInteractive: "Interaktiewe Modus",
+                dlTestBtn: "Aflaai Vraestel PDF",
+                dlMemoBtn: "Aflaai Memo PDF",
+                showMemo: "Wys Memorandum",
+                hideMemo: "Versteek Memorandum",
+                copy: "Kopieer",
+                print: "Druk",
+                instructionsHead: "INSTRUKSIES & INLIGTING:",
+                instructions1: "Beantwoord AL die vrae in die ruimtes voorsien.",
+                instructions2: "Nommer die antwoorde korrek volgens die nommerstelsel wat in hierdie vraestel gebruik word.",
+                instructions3: "Skryf netjies en leesbaar.",
+                memoHead: "NASIENMEMORANDUM",
+                submitBtn: "Dien Antwoorde In",
+                noticeSubjectRequired: "Voer asseblief 'n vak in voordat u die toets genereer.",
+                testCopiedNotice: "Vraestel en memorandum na knipbord gekopieer!"
+            }
+        };
+
+        function setLanguage(lang) {
+            currentLanguage = lang;
+            const t = translations[lang];
+
+            const btnEn = document.getElementById('lang-en');
+            const btnAf = document.getElementById('lang-af');
+            const formBtnEn = document.getElementById('btn-select-en');
+            const formBtnAf = document.getElementById('btn-select-af');
+
+            if (lang === 'af') {
+                if (btnAf) btnAf.className = "py-1 px-2.5 text-xs font-semibold rounded-lg flex items-center gap-1 transition bg-white text-indigo-900 shadow-sm";
+                if (btnEn) btnEn.className = "py-1 px-2.5 text-xs font-semibold rounded-lg flex items-center gap-1 transition text-indigo-200 hover:text-white";
+                if (formBtnAf) formBtnAf.className = "py-2 px-3 text-xs font-bold rounded-lg transition bg-amber-400 text-indigo-950 shadow-sm flex items-center justify-center gap-1.5";
+                if (formBtnEn) formBtnEn.className = "py-2 px-3 text-xs font-bold rounded-lg transition text-slate-600 hover:text-slate-900 flex items-center justify-center gap-1.5";
+            } else {
+                if (btnEn) btnEn.className = "py-1 px-2.5 text-xs font-semibold rounded-lg flex items-center gap-1 transition bg-white text-indigo-900 shadow-sm";
+                if (btnAf) btnAf.className = "py-1 px-2.5 text-xs font-semibold rounded-lg flex items-center gap-1 transition text-indigo-200 hover:text-white";
+                if (formBtnEn) formBtnEn.className = "py-2 px-3 text-xs font-bold rounded-lg transition bg-indigo-600 text-white shadow-sm flex items-center justify-center gap-1.5";
+                if (formBtnAf) formBtnAf.className = "py-2 px-3 text-xs font-bold rounded-lg transition text-slate-600 hover:text-slate-900 flex items-center justify-center gap-1.5";
+            }
+
+            document.getElementById('lbl-presets-title').innerHTML = `<i class="fa-solid fa-bolt text-amber-500"></i> ${t.presetsTitle}`;
+            document.getElementById('lbl-config-title').innerHTML = `<i class="fa-solid fa-sliders text-indigo-600"></i> ${t.configTitle}`;
+            if (document.getElementById('lbl-language')) document.getElementById('lbl-language').innerText = t.languageLbl;
+            document.getElementById('lbl-subject').innerText = t.subjectLbl;
+            document.getElementById('subject').placeholder = t.subjectPlaceholder;
+            document.getElementById('lbl-topic').innerText = t.topicLbl;
+            document.getElementById('topic').placeholder = t.topicPlaceholder;
+            document.getElementById('lbl-grade').innerText = t.gradeLbl;
+            document.getElementById('lbl-difficulty').innerText = t.difficultyLbl;
+            document.getElementById('lbl-questions').innerText = t.questionsLbl;
+            document.getElementById('lbl-test-type').innerText = t.testTypeLbl;
+            document.getElementById('lbl-upload').innerText = t.uploadLbl;
+            document.getElementById('btn-text').innerText = t.generateBtn;
+
+            document.getElementById('empty-title').innerText = t.emptyTitle;
+            document.getElementById('empty-desc').innerText = t.emptyDesc;
+            document.getElementById('loading-title').innerText = t.loadingTitle;
+            document.getElementById('loading-desc').innerText = t.loadingDesc;
+
+            document.getElementById('lbl-tab-paper').innerText = t.tabPaper;
+            document.getElementById('lbl-tab-interactive').innerText = t.tabInteractive;
+            
+            if (document.getElementById('lbl-btn-dl-test')) document.getElementById('lbl-btn-dl-test').innerText = t.dlTestBtn;
+            if (document.getElementById('lbl-btn-dl-memo')) document.getElementById('lbl-btn-dl-memo').innerText = t.dlMemoBtn;
+
+            const memoContainer = document.getElementById('memo-container');
+            const isMemoVisible = memoContainer && !memoContainer.classList.contains('hidden');
+            document.getElementById('lbl-btn-memo').innerText = isMemoVisible ? t.hideMemo : t.showMemo;
+
+            document.getElementById('lbl-btn-copy').innerText = t.copy;
+            document.getElementById('lbl-btn-print').innerText = t.print;
+
+            document.getElementById('lbl-instructions-head').innerText = t.instructionsHead;
+            const instList = document.getElementById('lbl-instructions-list');
+            if (instList && instList.children.length >= 3) {
+                instList.children[0].innerText = t.instructions1;
+                instList.children[1].innerText = t.instructions2;
+                instList.children[2].innerText = t.instructions3;
+            }
+            document.getElementById('lbl-memo-head').innerText = t.memoHead;
+            document.getElementById('lbl-btn-submit').innerText = t.submitBtn;
+        }
+
+        function fillPreset(subject, topic, grade) {
+            if (!checkAuthGuard()) return;
+            document.getElementById('subject').value = subject;
+            document.getElementById('topic').value = topic;
+            
+            const gradeSelect = document.getElementById('grade');
+            for (let i = 0; i < gradeSelect.options.length; i++) {
+                if (gradeSelect.options[i].value === grade) {
+                    gradeSelect.selectedIndex = i;
+                    break;
+                }
+            }
+        }
+
+        function handleFileSelect(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            document.getElementById('file-name').innerText = file.name;
+            document.getElementById('uploaded-file-preview').classList.remove('hidden');
+
+            const reader = new FileReader();
+            if (file.type.startsWith('image/') || file.type === 'application/pdf') {
+                reader.onload = function(e) {
+                    const base64Data = e.target.result.split(',')[1];
+                    uploadedFilePart = {
+                        inlineData: {
+                            mimeType: file.type || 'application/pdf',
+                            data: base64Data
+                        }
+                    };
+                    uploadedFileText = '';
+                };
+                reader.readAsDataURL(file);
+            } else {
+                reader.onload = function(e) {
+                    uploadedFileText = e.target.result;
+                    uploadedFilePart = null;
+                };
+                reader.readAsText(file);
+            }
+        }
+
+        function clearUploadedFile() {
+            document.getElementById('file-input').value = '';
+            document.getElementById('uploaded-file-preview').classList.add('hidden');
+            uploadedFilePart = null;
+            uploadedFileText = '';
+        }
+
+        function showModal(title, message) {
+            document.getElementById('modal-title').innerText = title;
+            document.getElementById('modal-message').innerText = message;
+            document.getElementById('custom-modal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('custom-modal').classList.add('hidden');
+        }
+
+        async function fetchWithRetry(url, options, maxRetries = 3) {
+            let delay = 1000;
+            for (let i = 0; i < maxRetries; i++) {
+                try {
+                    const response = await fetch(url, options);
+                    if (response.status === 429 || response.status >= 500) {
+                        if (i === maxRetries - 1) return response;
+                        await new Promise(res => setTimeout(res, delay));
+                        delay *= 2;
+                        continue;
+                    }
+                    return response;
+                } catch (err) {
+                    if (i === maxRetries - 1) throw err;
+                    await new Promise(res => setTimeout(res, delay));
+                    delay *= 2;
+                }
+            }
+        }
+
+        async function generateTest() {
+            if (!checkAuthGuard()) return;
+
+            const subject = document.getElementById('subject').value.trim();
+            const topic = document.getElementById('topic').value.trim();
+            const grade = document.getElementById('grade').value;
+            const difficulty = document.getElementById('difficulty').value;
+            const count = parseInt(document.getElementById('question-count').value, 10);
+            const format = document.getElementById('test-type').value;
+
+            if (!subject) {
+                showModal("Missing Field", translations[currentLanguage].noticeSubjectRequired);
+                return;
+            }
+
+            document.getElementById('empty-state').classList.add('hidden');
+            document.getElementById('test-container').classList.add('hidden');
+            document.getElementById('loading-state').classList.remove('hidden');
+
+            const btnGenerate = document.getElementById('btn-generate');
+            btnGenerate.disabled = true;
+            document.getElementById('btn-text').innerText = translations[currentLanguage].generatingBtn;
+
+            const hasUploadedMaterial = uploadedFilePart || uploadedFileText;
+
+            let strictConstraintPrompt = "";
+            if (hasUploadedMaterial) {
+                strictConstraintPrompt = `
+STRICT MANDATE: A document/image source material is provided.
+You MUST generate ALL ${count} questions STRICTLY and EXCLUSIVELY using the concepts, facts, and content found in the provided uploaded material.
+Do NOT include any external questions, outside knowledge, or general topics not explicitly present in the provided uploaded document/image. Every question MUST directly test content from the provided attachment.`;
+            }
+
+            const langInstruction = currentLanguage === 'af' ? 'IMPORTANT: Generate the entire test, instructions, questions, options, and marking memorandum in AFRIKAANS.' : 'Generate in English.';
+            
+            const systemPrompt = `You are an expert curriculum examiner and assessment developer.
+${langInstruction}
+${strictConstraintPrompt}
+Create a high-quality assessment with detailed solutions based on the request.
+You MUST output valid JSON only, without any explanatory markdown wrapper text.
+
+The output JSON structure MUST be strictly as follows:
+{
+  "title": "Test Title",
+  "subject": "${subject}",
+  "grade": "${grade}",
+  "totalMarks": 25,
+  "timeMinutes": 30,
+  "questions": [
+    {
+      "id": 1,
+      "questionNumber": "1.1",
+      "type": "mcq",
+      "questionText": "Question text here...",
+      "marks": 2,
+      "options": ["A) Option 1", "B) Option 2", "C) Option 3", "D) Option 4"],
+      "correctOptionIndex": 0,
+      "correctAnswer": "Exact concise answer string for auto-grading",
+      "memoSolution": "Detailed step-by-step marking solution & mark breakdown [1 mark for formula, 1 mark for answer]"
+    }
+  ]
+}`;
+
+            let userPrompt = `Generate a ${count}-question ${format} test for ${grade} ${subject}.
+Topic: ${topic || 'Comprehensive Subject Topic'}
+Difficulty Level: ${difficulty}`;
+
+            if (uploadedFileText) {
+                userPrompt += `\n\nSTRICT SOURCE MATERIAL TEXT:\n${uploadedFileText.substring(0, 4000)}`;
+            }
+
+            const contentsParts = [{ text: userPrompt }];
+            if (uploadedFilePart) {
+                contentsParts.push(uploadedFilePart);
+            }
+
+            const payload = {
+                contents: [{ parts: contentsParts }],
+                systemInstruction: { parts: [{ text: systemPrompt }] },
+                generationConfig: {
+                    responseMimeType: "application/json"
+                }
             };
 
-            html2pdf().from(element).set(options).save();
+            const apiKey = "";
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+
+            try {
+                const response = await fetchWithRetry(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`API response status: ${response.status}`);
+                }
+
+                const result = await response.json();
+                const jsonText = result.candidates?.[0]?.content?.parts?.[0]?.text;
+
+                if (!jsonText) {
+                    throw new Error("No response text returned from AI generator.");
+                }
+
+                let parsedJson = null;
+                try {
+                    const jsonMatch = jsonText.match(/\{[\s\S]*\}/);
+                    if (jsonMatch) {
+                        parsedJson = JSON.parse(jsonMatch[0]);
+                    } else {
+                        parsedJson = JSON.parse(jsonText);
+                    }
+                } catch (pErr) {
+                    console.error("JSON parse error:", pErr, jsonText);
+                    throw new Error("Invalid response format received.");
+                }
+
+                generatedTest = parsedJson;
+
+                renderPaperView(generatedTest);
+                renderInteractiveView(generatedTest);
+
+                document.getElementById('loading-state').classList.add('hidden');
+                document.getElementById('test-container').classList.remove('hidden');
+
+            } catch (error) {
+                console.error("Test generation error:", error);
+                document.getElementById('loading-state').classList.add('hidden');
+                document.getElementById('empty-state').classList.remove('hidden');
+                showModal("Generation Error", "Failed to generate test. Please check your connection or details and try again.");
+            } finally {
+                btnGenerate.disabled = false;
+                document.getElementById('btn-text').innerText = translations[currentLanguage].generateBtn;
+            }
         }
+
+        function renderPaperView(test) {
+            document.getElementById('paper-title').innerText = test.title || "NATIONAL SENIOR CERTIFICATE TEST";
+            document.getElementById('paper-subtitle').innerText = `${(test.subject || '').toUpperCase()} ${test.grade ? '- ' + test.grade.toUpperCase() : ''}`;
+            document.getElementById('paper-grade').innerText = test.grade || "SENIOR PHASE";
+            document.getElementById('paper-marks').innerText = `TOTAL: ${test.totalMarks || 25} MARKS`;
+            document.getElementById('paper-time').innerText = `TIME: ${test.timeMinutes || 30} MINUTES`;
+
+            const renderContainer = document.getElementById('questions-render');
+            renderContainer.innerHTML = '';
+
+            (test.questions || []).forEach((q, index) => {
+                const qDiv = document.createElement('div');
+                qDiv.className = 'space-y-2 border-b border-slate-100 pb-4';
+
+                let optionsHtml = '';
+                if (q.type === 'mcq' && q.options) {
+                    optionsHtml = `<div class="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-2 pl-4">
+                        ${q.options.map(opt => `<div class="text-xs text-slate-700 bg-slate-50 p-2 rounded-lg border border-slate-200/60">${opt}</div>`).join('')}
+                    </div>`;
+                }
+
+                let fillLines = '';
+                if (q.type !== 'mcq') {
+                    fillLines = `<div class="mt-3 space-y-2 no-print">
+                        <div class="h-6 border-b border-dashed border-slate-300 w-full"></div>
+                        <div class="h-6 border-b border-dashed border-slate-300 w-full"></div>
+                    </div>`;
+                }
+
+                qDiv.innerHTML = `
+                    <div class="flex items-start justify-between gap-3">
+                        <p class="text-sm font-semibold text-slate-900 leading-snug">
+                            <span class="text-indigo-600 font-bold mr-1.5">${q.questionNumber || (index + 1) + '.'}</span>
+                            ${q.questionText}
+                        </p>
+                        <span class="text-xs font-bold text-slate-600 bg-slate-100 px-2 py-0.5 rounded-md whitespace-nowrap">[${q.marks} ${q.marks === 1 ? 'mark' : 'marks'}]</span>
+                    </div>
+                    ${optionsHtml}
+                    ${fillLines}
+                `;
+                renderContainer.appendChild(qDiv);
+            });
+
+            // Render Memorandum
+            const memoRender = document.getElementById('memo-render');
+            memoRender.innerHTML = '';
+            (test.questions || []).forEach((q) => {
+                const mDiv = document.createElement('div');
+                mDiv.className = 'p-3 rounded-xl bg-slate-50 border border-slate-200/80 space-y-1';
+                
+                let ansStr = q.correctAnswer;
+                if (!ansStr && q.options && q.correctOptionIndex !== undefined) {
+                    const idx = parseInt(q.correctOptionIndex, 10);
+                    ansStr = !isNaN(idx) && q.options[idx] ? q.options[idx] : q.options[0];
+                }
+
+                mDiv.innerHTML = `
+                    <div class="flex items-center justify-between font-bold text-slate-800 text-xs">
+                        <span>${q.questionNumber || 'Q' + q.id}</span>
+                        <span class="text-amber-700">[${q.marks} Marks]</span>
+                    </div>
+                    <p class="text-xs font-semibold text-emerald-800">Answer: ${ansStr || 'See memo solution'}</p>
+                    <p class="text-xs text-slate-600 mt-1 leading-relaxed"><span class="font-medium text-slate-500">Solution Note:</span> ${q.memoSolution || 'Full marks awarded for correct calculation and answer.'}</p>
+                `;
+                memoRender.appendChild(mDiv);
+            });
+        }
+
+        function renderInteractiveView(test) {
+            document.getElementById('interactive-title').innerText = `${test.subject} - ${test.title || 'Online Test'}`;
+            
+            timeRemainingSeconds = (test.timeMinutes || 30) * 60;
+            startTimer();
+
+            const renderContainer = document.getElementById('interactive-render');
+            renderContainer.innerHTML = '';
+
+            (test.questions || []).forEach((q, index) => {
+                const qDiv = document.createElement('div');
+                qDiv.className = 'p-4 rounded-xl border border-slate-200/80 space-y-3 bg-slate-50/50';
+
+                let inputHtml = '';
+                if (q.type === 'mcq' && q.options) {
+                    inputHtml = `<div class="space-y-2 mt-2">
+                        ${q.options.map((opt, optIdx) => `
+                            <label class="flex items-center gap-3 p-3 rounded-xl border border-slate-200 bg-white hover:border-indigo-400 cursor-pointer transition">
+                                <input type="radio" name="iq_${q.id}" value="${optIdx}" class="w-4 h-4 text-indigo-600 border-slate-300 focus:ring-indigo-500">
+                                <span class="text-xs font-medium text-slate-700">${opt}</span>
+                            </label>
+                        `).join('')}
+                    </div>`;
+                } else {
+                    inputHtml = `
+                        <input type="text" id="iq_ans_${q.id}" placeholder="Type your answer here..." class="w-full text-xs px-3.5 py-2.5 border border-slate-200 rounded-xl bg-white focus:ring-2 focus:ring-indigo-500 outline-none transition">
+                    `;
+                }
+
+                qDiv.innerHTML = `
+                    <div class="flex items-start justify-between gap-2">
+                        <p class="text-xs font-bold text-slate-900">
+                            <span class="text-indigo-600 mr-1">${q.questionNumber || (index + 1) + '.'}</span>
+                            ${q.questionText}
+                        </p>
+                        <span class="text-[11px] font-bold text-slate-500">[${q.marks}m]</span>
+                    </div>
+                    ${inputHtml}
+                `;
+                renderContainer.appendChild(qDiv);
+            });
+
+            document.getElementById('interactive-results').classList.add('hidden');
+        }
+
+        function startTimer() {
+            clearInterval(timerInterval);
+            updateTimerDisplay();
+            timerInterval = setInterval(() => {
+                timeRemainingSeconds--;
+                if (timeRemainingSeconds <= 0) {
+                    clearInterval(timerInterval);
+                    submitInteractiveTest();
+                } else {
+                    updateTimerDisplay();
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            const mins = Math.floor(timeRemainingSeconds / 60);
+            const secs = timeRemainingSeconds % 60;
+            document.getElementById('timer-display').innerText = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        function submitInteractiveTest() {
+            clearInterval(timerInterval);
+            if (!generatedTest) return;
+
+            let earnedScore = 0;
+            let totalPossible = generatedTest.totalMarks || 0;
+            const breakdownContainer = document.getElementById('interactive-breakdown');
+            breakdownContainer.innerHTML = '';
+
+            (generatedTest.questions || []).forEach((q) => {
+                let isCorrect = false;
+                let userAnswerText = 'No answer';
+
+                if (q.type === 'mcq') {
+                    const selected = document.querySelector(`input[name="iq_${q.id}"]:checked`);
+                    if (selected) {
+                        const selectedIdx = parseInt(selected.value, 10);
+                        userAnswerText = q.options[selectedIdx];
+                        
+                        const targetIdx = parseInt(q.correctOptionIndex, 10);
+                        if (!isNaN(targetIdx) && selectedIdx === targetIdx) {
+                            isCorrect = true;
+                        } else if (q.correctAnswer && userAnswerText.toLowerCase().includes(q.correctAnswer.toLowerCase())) {
+                            isCorrect = true;
+                        }
+                    }
+                } else {
+                    const inputEl = document.getElementById(`iq_ans_${q.id}`);
+                    if (inputEl && inputEl.value.trim()) {
+                        userAnswerText = inputEl.value.trim();
+                        if (userAnswerText.toLowerCase() === (q.correctAnswer || '').toLowerCase()) {
+                            isCorrect = true;
+                        }
+                    }
+                }
+
+                if (isCorrect) {
+                    earnedScore += q.marks;
+                }
+
+                const resItem = document.createElement('div');
+                resItem.className = `p-3 rounded-xl border text-xs ${isCorrect ? 'bg-emerald-50 border-emerald-200' : 'bg-red-50 border-red-200'}`;
+                resItem.innerHTML = `
+                    <div class="flex items-center justify-between font-bold mb-1">
+                        <span class="${isCorrect ? 'text-emerald-900' : 'text-red-900'}">${q.questionNumber || 'Q' + q.id}</span>
+                        <span class="${isCorrect ? 'text-emerald-700' : 'text-red-700'}">${isCorrect ? '+' + q.marks : '0'} / ${q.marks} Marks</span>
+                    </div>
+                    <p class="text-slate-700"><strong>Your Answer:</strong> ${userAnswerText}</p>
+                    <p class="text-slate-600 mt-0.5"><strong>Memo Solution:</strong> ${q.correctAnswer || q.memoSolution}</p>
+                `;
+                breakdownContainer.appendChild(resItem);
+            });
+
+            document.getElementById('results-score-badge').innerText = `${earnedScore} / ${totalPossible}`;
+            document.getElementById('interactive-results').classList.remove('hidden');
+        }
+
+        function switchView(view) {
+            const paperTab = document.getElementById('tab-paper');
+            const interactiveTab = document.getElementById('tab-interactive');
+            const paperView = document.getElementById('paper-view');
+            const interactiveView = document.getElementById('interactive-view');
+
+            if (view === 'paper') {
+                paperTab.className = "px-3.5 py-2 text-xs font-bold rounded-xl bg-indigo-50 text-indigo-700 transition flex items-center gap-1.5";
+                interactiveTab.className = "px-3.5 py-2 text-xs font-bold rounded-xl text-slate-600 hover:bg-slate-100 transition flex items-center gap-1.5";
+                paperView.classList.remove('hidden');
+                interactiveView.classList.add('hidden');
+            } else {
+                interactiveTab.className = "px-3.5 py-2 text-xs font-bold rounded-xl bg-indigo-50 text-indigo-700 transition flex items-center gap-1.5";
+                paperTab.className = "px-3.5 py-2 text-xs font-bold rounded-xl text-slate-600 hover:bg-slate-100 transition flex items-center gap-1.5";
+                interactiveView.classList.remove('hidden');
+                paperView.classList.add('hidden');
+            }
+        }
+
+        function toggleMemo() {
+            const memoContainer = document.getElementById('memo-container');
+            const isHidden = memoContainer.classList.contains('hidden');
+            const t = translations[currentLanguage];
+
+            if (isHidden) {
+                memoContainer.classList.remove('hidden');
+                document.getElementById('lbl-btn-memo').innerText = t.hideMemo;
+            } else {
+                memoContainer.classList.add('hidden');
+                document.getElementById('lbl-btn-memo').innerText = t.showMemo;
+            }
+        }
+
+        function copyTestText() {
+            if (!generatedTest) return;
+            let textToCopy = `${generatedTest.title}\nSubject: ${generatedTest.subject} (${generatedTest.grade})\nTotal Marks: ${generatedTest.totalMarks}\n\nQUESTIONS:\n`;
+            
+            (generatedTest.questions || []).forEach((q, i) => {
+                textToCopy += `\n${q.questionNumber || (i + 1) + '.'} ${q.questionText} [${q.marks} marks]\n`;
+                if (q.options) {
+                    textToCopy += q.options.map(o => `   ${o}`).join('\n') + '\n';
+                }
+            });
+
+            textToCopy += `\n\nMARKING MEMORANDUM:\n`;
+            (generatedTest.questions || []).forEach((q, i) => {
+                textToCopy += `${q.questionNumber || (i + 1) + '.'} Answer: ${q.correctAnswer}\n   Memo: ${q.memoSolution}\n`;
+            });
+
+            const tempInput = document.createElement('textarea');
+            tempInput.value = textToCopy;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
+
+            showModal("Copied", translations[currentLanguage].testCopiedNotice);
+        }
+
+        function downloadTestPDF() {
+            if (!generatedTest) return;
+            
+            const element = document.createElement('div');
+            element.style.padding = '20px';
+            element.style.fontFamily = 'Arial, sans-serif';
+            element.style.color = '#0f172a';
+            element.style.backgroundColor = '#ffffff';
+
+            element.innerHTML = `
+                <div style="border-bottom: 2px solid #0f172a; padding-bottom: 12px; margin-bottom: 20px;">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                        <div>
+                            <h1 style="font-size: 20px; font-weight: bold; margin: 0; text-transform: uppercase;">${generatedTest.title || 'NATIONAL SENIOR CERTIFICATE TEST'}</h1>
+                            <p style="font-size: 14px; color: #4338ca; font-weight: bold; margin: 4px 0 0 0;">${(generatedTest.subject || '').toUpperCase()} ${generatedTest.grade ? '- ' + generatedTest.grade.toUpperCase() : ''}</p>
+                        </div>
+                        <div style="text-align: right; font-size: 12px;">
+                            <div style="font-weight: bold; text-transform: uppercase;">${generatedTest.grade || ''}</div>
+                            <div style="font-size: 14px; font-weight: bold; margin-top: 2px;">TOTAL: ${generatedTest.totalMarks || 25} MARKS</div>
+                            <div style="color: #64748b; font-size: 11px;">TIME: ${generatedTest.timeMinutes || 30} MINUTES</div>
+                        </div>
+                    </div>
+                    <div style="margin-top: 15px; padding: 10px; background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; font-size: 11px; color: #334155;">
+                        <strong>INSTRUCTIONS & INFORMATION:</strong>
+                        <ol style="margin: 4px 0 0 18px; padding: 0;">
+                            <li>Answer ALL questions in the spaces provided.</li>
+                            <li>Number the answers correctly according to the numbering system used in this question paper.</li>
+                            <li>Write neatly and legibly.</li>
+                        </ol>
+                    </div>
+                </div>
+                <div>
+                    ${(generatedTest.questions || []).map((q, idx) => `
+                        <div style="margin-bottom: 20px; page-break-inside: avoid;">
+                            <div style="display: flex; justify-content: space-between; font-weight: 600; font-size: 13px;">
+                                <span><strong style="color: #4338ca; margin-right: 6px;">${q.questionNumber || (idx + 1) + '.'}</strong> ${q.questionText}</span>
+                                <span style="font-size: 11px; white-space: nowrap; margin-left: 10px; font-weight: bold;">[${q.marks} ${q.marks === 1 ? 'mark' : 'marks'}]</span>
+                            </div>
+                            ${q.type === 'mcq' && q.options ? `
+                                <div style="margin-top: 8px; margin-left: 15px; display: grid; grid-template-columns: 1fr 1fr; gap: 6px; font-size: 12px;">
+                                    ${q.options.map(opt => `<div style="padding: 6px 10px; background-color: #f8fafc; border-radius: 4px; border: 1px solid #cbd5e1;">${opt}</div>`).join('')}
+                                </div>
+                            ` : `
+                                <div style="margin-top: 12px;">
+                                    <div style="border-bottom: 1px dashed #cbd5e1; height: 24px; width: 100%;"></div>
+                                    <div style="border-bottom: 1px dashed #cbd5e1; height: 24px; width: 100%;"></div>
+                                </div>
+                            `}
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+
+            const filename = `${(generatedTest.subject || 'Test').replace(/\s+/g, '_')}_${(generatedTest.grade || '').replace(/\s+/g, '_')}_QuestionPaper.pdf`;
+            
+            const opt = {
+                margin:       [10, 10, 10, 10],
+                filename:     filename,
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2, useCORS: true },
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+
+            if (window.html2pdf) {
+                html2pdf().set(opt).from(element).save();
+            } else {
+                window.print();
+            }
+        }
+
+        function downloadMemoPDF() {
+            if (!generatedTest) return;
+
+            const element = document.createElement('div');
+            element.style.padding = '20px';
+            element.style.fontFamily = 'Arial, sans-serif';
+            element.style.color = '#0f172a';
+            element.style.backgroundColor = '#ffffff';
+
+            element.innerHTML = `
+                <div style="border-bottom: 2px solid #d97706; padding-bottom: 12px; margin-bottom: 20px;">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                        <div>
+                            <h1 style="font-size: 18px; font-weight: bold; margin: 0; color: #b45309; text-transform: uppercase;">MARKING MEMORANDUM / NASIENMEMORANDUM</h1>
+                            <p style="font-size: 14px; color: #0f172a; font-weight: bold; margin: 4px 0 0 0;">${generatedTest.title || 'TEST MEMORANDUM'} - ${(generatedTest.subject || '').toUpperCase()}</p>
+                        </div>
+                        <div style="text-align: right; font-size: 12px;">
+                            <span style="background-color: #fef3c7; color: #92400e; font-weight: bold; padding: 4px 8px; border-radius: 4px; border: 1px solid #fcd34d; font-size: 11px;">CONFIDENTIAL</span>
+                            <div style="font-size: 13px; font-weight: bold; margin-top: 6px;">TOTAL: ${generatedTest.totalMarks || 25} MARKS</div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    ${(generatedTest.questions || []).map((q, idx) => {
+                        let ansStr = q.correctAnswer;
+                        if (!ansStr && q.options && q.correctOptionIndex !== undefined) {
+                            const i = parseInt(q.correctOptionIndex, 10);
+                            ansStr = !isNaN(i) && q.options[i] ? q.options[i] : q.options[0];
+                        }
+                        return `
+                            <div style="margin-bottom: 14px; padding: 12px; background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; page-break-inside: avoid;">
+                                <div style="display: flex; justify-content: space-between; font-weight: bold; font-size: 12px; color: #0f172a; margin-bottom: 4px;">
+                                    <span>${q.questionNumber || 'Q' + (idx + 1)}</span>
+                                    <span style="color: #b45309;">[${q.marks} Marks]</span>
+                                </div>
+                                <p style="font-size: 12px; font-weight: bold; color: #065f46; margin: 4px 0;">Answer: ${ansStr || 'See memo solution'}</p>
+                                <p style="font-size: 11px; color: #475569; margin: 4px 0 0 0; line-height: 1.4;"><strong style="color: #64748b;">Solution Note:</strong> ${q.memoSolution || 'Full marks awarded for correct calculation and answer.'}</p>
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+            `;
+
+            const filename = `${(generatedTest.subject || 'Test').replace(/\s+/g, '_')}_${(generatedTest.grade || '').replace(/\s+/g, '_')}_Memorandum.pdf`;
+
+            const opt = {
+                margin:       [10, 10, 10, 10],
+                filename:     filename,
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2, useCORS: true },
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+
+            if (window.html2pdf) {
+                html2pdf().set(opt).from(element).save();
+            } else {
+                window.print();
+            }
+        }
+
+        function printTest() {
+            window.print();
+        }
+
+        window.onload = function() {
+            getStoredAccounts(); // Initialize account database in persistent storage
+            setLanguage('en');
+        };
     </script>
 </body>
 </html>
