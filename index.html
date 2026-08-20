@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Crown Academy Test Generator</title>
-    <!-- Standalone Compiled CSS Engine - Fixes Blank Layout Rendering -->
-    <link rel="stylesheet" href="https://cloudflare.com">
     <!-- html2pdf.js CDN for direct PDF Download -->
     <script src="https://cloudflare.com"></script>
     <!-- FontAwesome CDN for Icons -->
@@ -14,119 +12,95 @@
     <link href="https://googleapis.com" rel="stylesheet">
     
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f8fafc;
-        }
-        /* Custom scrollbar */
-        ::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #f1f5f9;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #94a3b8;
-        }
-        /* Print styles for test and memorandum export */
-        @media print {
-            body {
-                background: white !important;
-                color: black !important;
-            }
-            .no-print {
-                display: none !important;
-            }
-            .print-only {
-                display: block !important;
-            }
-            .shadow-sm, .shadow-md, .shadow-lg {
-                box-shadow: none !important;
-            }
-            .border {
-                border-color: #e2e8f0 !important;
-            }
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #1e293b; min-height: 100vh; display: flex; flex-direction: column; }
+        .hidden { display: none !important; }
+        
+        /* Navigation Styles */
+        header { background-color: #1e1b4b; color: #ffffff; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); position: sticky; top: 0; z-index: 40; }
+        .header-container { max-width: 80rem; margin: 0 auto; height: 4rem; display: flex; align-items: center; justify-content: space-between; padding: 0 1.5rem; }
+        .flex-items { display: flex; align-items: center; gap: 0.75rem; }
+        .logo-box { background-color: #fbbf24; color: #1e1b4b; padding: 0.5rem; border-radius: 0.75rem; font-weight: 700; font-size: 1.25rem; display: flex; align-items: center; justify-content: center; }
+        .nav-links { display: flex; align-items: center; gap: 1.5rem; font-size: 0.75rem; font-weight: 600; }
+        .nav-links button { background: none; border: none; color: #c7d2fe; cursor: pointer; font-weight: 600; transition: color 0.2s; }
+        .nav-links button:hover { color: white; }
+        
+        /* Button Styles */
+        .lang-wrap { background-color: #0f172a; padding: 0.25rem; border-radius: 0.75rem; display: flex; align-items: center; border: 1px solid #4338ca; }
+        .btn-lang { padding: 0.25rem 0.625rem; font-size: 0.75rem; font-weight: 600; border-radius: 0.5rem; border: none; cursor: pointer; color: #c7d2fe; background: transparent; }
+        .btn-lang.active { background-color: white; color: #1e1b4b; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .btn-gold { background-color: #fbbf24; color: #1e1b4b; padding: 0.5rem 1rem; font-size: 0.75rem; font-weight: 700; border-radius: 0.75rem; border: none; cursor: pointer; display: flex; align-items: center; gap: 0.375rem; }
+        .btn-gold:hover { background-color: #f59e0b; }
+        .btn-outline { color: #c7d2fe; padding: 0.5rem 1rem; font-size: 0.75rem; font-weight: 600; border-radius: 0.75rem; border: 1px solid #4338ca; background: transparent; cursor: pointer; }
+        .btn-outline:hover { color: white; border-color: white; }
+        .btn-indigo { width: 100%; padding: 0.75rem; background-color: #4f46e5; color: white; font-weight: 700; border-radius: 0.75rem; font-size: 0.875rem; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem; }
+        .btn-indigo:hover { background-color: #4338ca; }
+        
+        /* Content Sections */
+        .hero-banner { background: linear-gradient(135deg, #312e81, #1e1b4b); color: white; padding: 5rem 1.5rem; text-align: center; width: 100%; }
+        .hero-container { max-width: 56rem; margin: 0 auto; display: flex; flex-direction: column; gap: 1.5rem; align-items: center; }
+        .pill-tag { background-color: rgba(251, 191, 36, 0.15); border: 1px solid rgba(251, 191, 36, 0.3); color: #fcd34d; padding: 0.375rem 0.875rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; display: inline-flex; align-items: center; gap: 0.5rem; text-transform: uppercase; }
+        .hero-container h1 { font-size: 2.5rem; font-weight: 800; line-height: 1.2; }
+        .hero-container p { color: #cbd5e1; font-size: 1.125rem; max-width: 42rem; line-height: 1.6; }
+        
+        /* Features Section */
+        .grid-section { max-width: 80rem; margin: -2.5rem auto 3rem auto; padding: 0 1.5rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; position: relative; z-index: 10; w-index: 10; width: 100%; }
+        .card-feature { background-color: white; padding: 1.5rem; border-radius: 1rem; border: 1px solid #e2e8f0; display: flex; gap: 1rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); }
+        .card-icon { width: 3rem; height: 3rem; border-radius: 0.75rem; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; flex-shrink: 0; }
+        .icon-blue { background-color: #e0e7ff; color: #4f46e5; }
+        .icon-amber { background-color: #fef3c7; color: #d97706; }
+        .icon-green { background-color: #d1fae5; color: #059669; }
+        .card-feature h3 { font-size: 1rem; font-weight: 700; color: #0f172a; margin-bottom: 0.25rem; }
+        .card-feature p { color: #64748b; font-size: 0.8125rem; line-height: 1.4; }
+        
+        /* Workspace Setup Section */
+        .workspace-grid { max-width: 80rem; margin: 0 auto; padding: 2rem 1.5rem; display: grid; grid-template-columns: 1fr; gap: 2rem; width: 100%; }
+        @media (min-width: 1024px) { .workspace-grid { grid-template-columns: 320px 1fr; } }
+        .panel-box { background-color: white; padding: 1.5rem; border-radius: 1rem; border: 1px solid #e2e8f0; height: fit-content; display: flex; flex-direction: column; gap: 1.25rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+        .form-group { display: flex; flex-direction: column; gap: 0.375rem; }
+        .form-group label { font-size: 0.75rem; font-weight: 600; color: #475569; text-transform: uppercase; }
+        .form-group select, .form-group input, .form-group textarea { width: 100%; background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 0.75rem; padding: 0.625rem 0.75rem; font-size: 0.875rem; color: #0f172a; outline: none; }
+        .workspace-header { display: flex; justify-content: space-between; align-items: center; background-color: white; padding: 1.25rem 1.5rem; border-radius: 1rem; border: 1px solid #e2e8f0; }
+        .placeholder-box { background-color: white; border: 2px dashed #e2e8f0; border-radius: 1rem; padding: 4rem 2rem; text-align: center; color: #94a3b8; }
+        
+        /* Authentication Blocks */
+        .session-wrap { background-color: #3730a3; padding: 0.25rem 0.75rem; border-radius: 0.75rem; display: flex; align-items: center; gap: 0.5rem; border: 1px solid #4338ca; }
+        .user-icon { width: 1.5rem; height: 1.5rem; border-radius: 9999px; background-color: #fbbf24; color: #1e1b4b; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; }
+        .modal-overlay { position: fixed; inset: 0; background-color: rgba(15, 23, 42, 0.6); display: flex; align-items: center; justify-content: center; padding: 1rem; z-index: 50; }
+        .modal-body { background-color: white; width: 100%; max-width: 24rem; border-radius: 1rem; padding: 1.5rem; display: flex; flex-direction: column; gap: 1.25rem; position: relative; }
+        .btn-close { position: absolute; top: 1rem; right: 1rem; background: transparent; border: none; color: #94a3b8; cursor: pointer; font-size: 1.25rem; }
+        .toast { position: fixed; bottom: 1.25rem; right: 1.25rem; background-color: #0f172a; color: white; padding: 0.75rem 1.25rem; border-radius: 0.75rem; display: flex; align-items: center; gap: 0.5rem; font-size: 0.75rem; font-weight: 500; z-index: 60; }
     </style>
 </head>
-<body class="text-slate-800 min-h-screen flex flex-col">
+<body>
 
-    <header class="bg-indigo-900 text-white shadow-md sticky top-0 Regal-Header z-40 no-print" style="background-color: #1e1b4b;">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between" style="display: flex; height: 4rem; justify-content: space-between; align-items: center; max-width: 80rem; margin: 0 auto;">
-            <!-- Logo & Title -->
-            <div class="flex items-center gap-3 cursor-pointer" onclick="showLandingPage()" style="display: flex; align-items: center; gap: 0.75rem;">
-                <div class="bg-amber-400 text-indigo-950 p-2 rounded-xl flex items-center justify-center font-bold text-xl shadow" style="background-color: #fbbf24; color: #1e1b4b; padding: 0.5rem; border-radius: 0.75rem; font-weight: 700; font-size: 1.25rem; display: flex; align-items: center; justify-content: center;">
-                    <i class="fa-solid font-bold fa-crown text-amber-900 text-lg" style="color: #78350f;"></i>
-                </div>
+    <header>
+        <div class="header-container">
+            <div class="flex-items" style="cursor: pointer;" onclick="showLandingPage()">
+                <div class="logo-box"><i class="fa-solid fa-crown"></i></div>
                 <div>
-                    <h1 class="font-bold text-lg leading-tight tracking-wide" style="font-weight: 700; font-size: 1.125rem; line-height: 1.25;">Crown Academy</h1>
-                    <p class="text-xs text-indigo-200" style="font-size: 0.75rem; color: #c7d2fe;">AI Test & Exam Generator</p>
+                    <h1 style="color: white; font-weight: 700; font-size: 1.125rem;">Crown Academy</h1>
+                    <p style="color: #c7d2fe; font-size: 0.75rem;">AI Test & Exam Generator</p>
                 </div>
             </div>
-
-            <!-- Navigation Links -->
-            <nav class="hidden md:flex items-center gap-6 text-xs font-semibold text-indigo-200" style="display: flex; align-items: center; gap: 1.5rem; font-size: 0.75rem; font-weight: 600;">
-                <button onclick="showLandingPage()" class="hover:text-white transition text-indigo-200">Home</button>
-                <button onclick="scrollToSection('pricing')" class="hover:text-white transition text-indigo-200">Pricing</button>
-                <button onclick="scrollToSection('contact')" class="hover:text-white transition text-indigo-200">Contact</button>
-                <button onclick="navigateToGenerator()" class="hover:text-white transition font-bold" style="color: #fcd34d;">Generator Tool</button>
+            <nav class="nav-links">
+                <button onclick="showLandingPage()">Home</button>
+                <button onclick="scrollToSection('pricing')">Pricing</button>
+                <button onclick="scrollToSection('contact')">Contact</button>
+                <button onclick="navigateToGenerator()" style="color: #fcd34d; font-weight: 700;">Generator Tool</button>
             </nav>
-
-            <!-- Header Controls & Auth State -->
-            <div class="flex items-center gap-3" style="display: flex; align-items: center; gap: 0.75rem;">
-                <!-- Language Toggle -->
-                <div class="bg-indigo-950 p-1 rounded-xl flex items-center border border-indigo-700" style="background-color: #0f172a; padding: 0.25rem; border-radius: 0.75rem; display: flex; align-items: center; border: 1px solid #4338ca;">
-                    <button id="lang-en" onclick="setLanguage('en')" class="py-1 px-2-5 text-xs font-semibold rounded-lg flex items-center gap-1 transition bg-white text-indigo-900 shadow-sm" style="padding: 0.25rem 0.625rem; font-size: 0.75rem; font-weight: 600; border-radius: 0.5rem; background-color: white; color: #1e1b4b;">
-                        🇬🇧 EN
-                    </button>
-                    <button id="lang-af" onclick="setLanguage('af')" class="py-1 px-2-5 text-xs font-semibold rounded-lg flex items-center gap-1 transition text-indigo-200 hover:text-white" style="padding: 0.25rem 0.625rem; font-size: 0.75rem; font-weight: 600; border-radius: 0.5rem; color: #c7d2fe;">
-                        🇿🇦 AF
-                    </button>
+            <div class="flex-items">
+                <div class="lang-wrap">
+                    <button id="lang-en" onclick="setLanguage('en')" class="btn-lang active">🇬🇧 EN</button>
+                    <button id="lang-af" onclick="setLanguage('af')" class="btn-lang">🇿🇦 AF</button>
                 </div>
-
-                <!-- Logged In / Out Buttons -->
-                <div id="auth-header-logged-out" class="flex items-center gap-2" style="display: flex; align-items: center; gap: 0.5rem;">
-                    <button onclick="openAuthModal('login')" class="px-3 py-1-5 text-xs font-semibold rounded-xl bg-amber-400 hover:bg-amber-300 text-indigo-950 transition shadow-sm flex items-center gap-1-5" style="background-color: #fbbf24; color: #1e1b4b; padding: 0.375rem 0.75rem; font-size: 0.75rem; font-weight: 600; border-radius: 0.75rem; display: flex; align-items: center; gap: 0.375rem;">
-                        <i class="fa-solid fa-right-to-bracket"></i>
-                        <span>Log In</span>
-                    </button>
-                    <button onclick="openAuthModal('register')" class="px-3 py-1-5 text-xs font-semibold rounded-xl border border-indigo-700 text-indigo-200 hover:text-white transition" style="color: #c7d2fe; padding: 0.375rem 0.75rem; font-size: 0.75rem; font-weight: 600; border-radius: 0.75rem; border: 1px solid #4338ca; background: transparent;">
-                        <span>Register</span>
-                    </button>
+                <div id="auth-header-logged-out" class="flex-items" style="gap: 0.5rem;">
+                    <button onclick="openAuthModal('login')" class="btn-gold"><i class="fa-solid fa-right-to-bracket"></i><span>Log In</span></button>
+                    <button onclick="openAuthModal('register')" class="btn-outline"><span>Register</span></button>
                 </div>
-
-                <div id="auth-header-logged-in" class="hidden flex items-center gap-3" style="display: none; align-items: center; gap: 0.75rem;">
-                    <div class="flex items-center gap-2 bg-indigo-800 px-3 py-1 rounded-xl border border-indigo-700" style="background-color: #3730a3; padding: 0.25rem 0.75rem; border-radius: 0.75rem; display: flex; align-items: center; gap: 0.5rem; border: 1px solid #4338ca;">
-                        <div class="w-6 h-6 rounded-full bg-amber-400 text-indigo-950 flex items-center justify-center text-xs font-bold" style="width: 1.5rem; height: 1.5rem; border-radius: 9999px; background-color: #fbbf24; color: #1e1b4b; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700;">
-                            <i class="fa-solid fa-user-graduate"></i>
-                        </div>
-                        <span id="user-display-name" class="text-xs font-medium text-white" style="font-size: 0.75rem; font-weight: 500; color: white;">Teacher Account</span>
-                        <!-- Admin Panel Button - Only visible to Admin -->
-                        <button id="admin-panel-btn" onclick="openAdminModal()" class="hidden bg-amber-400 hover:bg-amber-300 text-indigo-950 text-[10px] font-extrabold px-2.5 py-1 rounded-md flex items-center gap-1 shadow transition" style="background-color: #fbbf24; color: #1e1b4b; font-size: 10px; font-weight: 800; padding: 0.25rem 0.625rem; border-radius: 0.375rem; display: none; align-items: center; gap: 0.25rem;">
-                            <i class="fa-solid fa-user-gear text-amber-900" style="color: #78350f;"></i> Admin Panel
-                        </button>
-                        <!-- Gemini 3 Flash Badge - Only visible to Admin -->
-                        <span id="admin-gemini-badge" class="hidden bg-indigo-950 text-amber-400 text-[10px] font-extrabold px-2 py-0.5 rounded-md flex items-center gap-1 border border-indigo-700" style="background-color: #0f172a; color: #fbbf24; font-size: 10px; font-weight: 800; padding: 0.125rem 0.5rem; border-radius: 0.375rem; display: none; align-items: center; gap: 0.25rem; border: 1px solid #4338ca;">
-                            <i class="fa-solid fa-bolt"></i> Gemini 3 Flash
-                        </span>
+                <div id="auth-header-logged-in" class="hidden flex-items">
+                    <div class="session-wrap">
+                        <div class="user-icon"><i class="fa-solid fa-user-graduate"></i></div>
+                        <span id="user-display-name" style="font-size: 0.75rem; font-weight: 500; color: white;">Teacher Account</span>
+                        <button id="admin-panel-btn" onclick="openAdminModal()" class="btn-gold hidden" style="font-size: 10px; font-weight: 800; padding: 0.25rem 0.5rem; border-radius: 0.375rem;"><i class="fa-solid fa-user-gear"></i> Admin Panel</button>
                     </div>
-                    <button onclick="handleLogout()" class="text-xs text-indigo-300 hover:text-red-300 transition" style="font-size: 0.75rem; color: #a5b4fc;" title="Log Out">
-                        <i class="fa-solid fa-power-off text-sm" style="font-size: 0.875rem;"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </header>
-
-    <!-- MAIN APP CANVAS / LAYERS -->
-    <main class="flex-1 flex flex-col" style="flex: 1 1 0%; display: flex; flex-direction: column;">
-        <!-- LANDING / HOME PAGE SECTION -->
-        <div id="landing-page" class="space-y-12 pb-16 no-print" style="padding-bottom: 4rem;">
-            <!-- Hero Section -->
-            <section class="bg-indigo-950 text-white py-16 px-4 sm:px-6 lg:px-8 text-center relative overflow-hidden" style="background: linear-to-b, #312e81, #1e1b4b; color: white; padding: 4rem 1rem; text-align: center;">
-                <div class="max-w-4xl mx-auto relative z-10" style="max-width: 56rem; margin: 0 auto; display: flex; flex-direction: column; gap: 1.5rem;">
