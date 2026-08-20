@@ -11,38 +11,25 @@
     <!-- Google Fonts Inter -->
     <link href="https://googleapis.com" rel="stylesheet">
     
-    <!-- EMBEDDED MONOLITHIC ZERO-DEPENDENCY CSS ENGINE -->
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #1e293b; min-height: 100vh; display: flex; flex-direction: column; }
         .hidden { display: none !important; }
         
-        /* Navigation Bar Styles */
-        header { background-color: #1e1b4b; color: #ffffff; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); position: sticky; top: 0; z-index: 40; }
-        .header-container { max-width: 80rem; margin: 0 auto; height: 4rem; display: flex; align-items: center; justify-content: space-between; padding: 0 1.5rem; }
-        .flex-items { display: flex; align-items: center; gap: 0.75rem; }
-        .logo-box { background-color: #fbbf24; color: #1e1b4b; padding: 0.5rem; border-radius: 0.75rem; font-weight: 700; font-size: 1.25rem; display: flex; align-items: center; justify-content: center; }
-        .nav-links { display: flex; align-items: center; gap: 1.5rem; font-size: 0.75rem; font-weight: 600; }
-        .nav-links a { text-decoration: none; color: #c7d2fe; font-weight: 600; transition: color 0.2s; }
-        .nav-links a:hover { color: white; }
-        
         /* Button Styles */
-        .lang-wrap { background-color: #0f172a; padding: 0.25rem; border-radius: 0.75rem; display: flex; align-items: center; border: 1px solid #4338ca; }
-        .btn-lang { padding: 0.25rem 0.625rem; font-size: 0.75rem; font-weight: 600; border-radius: 0.5rem; border: none; cursor: pointer; color: #c7d2fe; background: transparent; }
-        .btn-lang.active { background-color: white; color: #1e1b4b; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
         .btn-gold { text-decoration: none; background-color: #fbbf24; color: #1e1b4b; padding: 0.5rem 1rem; font-size: 0.75rem; font-weight: 700; border-radius: 0.75rem; border: none; cursor: pointer; display: flex; align-items: center; gap: 0.375rem; }
         .btn-gold:hover { background-color: #f59e0b; }
         .btn-outline { text-decoration: none; color: #c7d2fe; padding: 0.5rem 1rem; font-size: 0.75rem; font-weight: 600; border-radius: 0.75rem; border: 1px solid #4338ca; background: transparent; cursor: pointer; }
         .btn-outline:hover { color: white; border-color: white; }
         
-        /* Hero Presentation Layout Components */
-        .hero-banner { background: linear-gradient(135deg, #312e81, #1e1b4b); color: white; padding: 5rem 1.5rem; text-align: center; width: 100%; }
+        /* Hero Component Section */
+        .hero-banner { background: linear-gradient(135deg, #312e81, #1e1b4b); color: white; padding: 6rem 1.5rem 5rem 1.5rem; text-align: center; width: 100%; }
         .hero-container { max-width: 56rem; margin: 0 auto; display: flex; flex-direction: column; gap: 1.5rem; align-items: center; }
         .pill-tag { background-color: rgba(251, 191, 36, 0.15); border: 1px solid rgba(251, 191, 36, 0.3); color: #fcd34d; padding: 0.375rem 0.875rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; display: inline-flex; align-items: center; gap: 0.5rem; text-transform: uppercase; }
         .hero-container h1 { font-size: 2.5rem; font-weight: 800; tracking-spacing: -0.025em; line-height: 1.2; }
         .hero-container p { color: #cbd5e1; font-size: 1.125rem; max-width: 42rem; line-height: 1.6; }
         
-        /* Features Section Cards Grid layout matrix */
+        /* Highlight Feature Cards Row */
         .grid-section { max-width: 80rem; margin: -2.5rem auto 3rem auto; padding: 0 1.5rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; position: relative; z-index: 10; width: 100%; }
         .card-feature { background-color: white; padding: 1.5rem; border-radius: 1rem; border: 1px solid #e2e8f0; display: flex; gap: 1rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); text-align: left; }
         .card-icon { width: 3rem; height: 3rem; border-radius: 0.75rem; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; flex-shrink: 0; }
@@ -52,48 +39,54 @@
         .card-feature h3 { font-size: 1rem; font-weight: 700; color: #0f172a; margin-bottom: 0.25rem; }
         .card-feature p { color: #64748b; font-size: 0.8125rem; line-height: 1.4; }
         
-        /* Pricing Plan Section Cards Structure Matrix components layout */
+        /* Pricing Cards Component Matrix Setup */
         .pricing-section { max-width: 80rem; margin: 2rem auto; padding: 0 1.5rem; text-align: center; }
-        .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 1.5rem; }
-        .price-card { background-color: white; border: 1px solid #e2e8f0; border-radius: 1rem; padding: 2rem; display: flex; flex-direction: column; gap: 1rem; text-align: left; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
-        .price-card.featured { border-color: #fbbf24; box-shadow: 0 10px 15px -3px rgba(251,191,36,0.1); }
+        .pricing-label { font-size: 0.75rem; font-weight: 700; color: #4f46e5; text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 0.5rem; }
+        .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 1rem; margin-bottom: 3rem; }
+        
+        .price-card { background-color: white; border: 1px solid #e2e8f0; border-radius: 1rem; padding: 2rem; display: flex; flex-direction: column; gap: 1.25rem; text-align: left; position: relative; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
+        .price-card.featured { border: 2px solid #4f46e5; box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.1); }
+        
+        .badge-sub { font-size: 0.6875rem; font-weight: 700; padding: 0.25rem 0.625rem; border-radius: 9999px; text-transform: uppercase; display: inline-block; width: fit-content; }
+        .badge-blue { background-color: #e0e7ff; color: #4f46e5; }
+        .badge-gold-pill { background-color: #fef3c7; color: #d97706; }
+        .badge-premium { background-color: #fbbf24; color: #1e1b4b; font-size: 0.6875rem; font-weight: 700; padding: 0.375rem 0.875rem; border-radius: 9999px; text-transform: uppercase; position: absolute; top: -0.75rem; right: 1.5rem; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        
+        .card-price-text { font-size: 2.25rem; font-weight: 800; color: #0f172a; margin: 0.25rem 0; display: flex; align-items: baseline; }
+        .card-price-text span { font-size: 0.875rem; font-weight: 400; color: #64748b; margin-left: 0.25rem; }
+        
+        .price-card ul { list-style-type: none; display: flex; flex-direction: column; gap: 0.625rem; font-size: 0.875rem; color: #475569; margin-bottom: 0.5rem; }
+        .price-card ul li { display: flex; align-items: center; gap: 0.5rem; }
+        .price-card ul li i { color: #10b981; font-size: 0.875rem; }
+        .price-card.featured ul li i { color: #fbbf24; }
+        
+        .btn-sub-wa { text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.75rem; border-radius: 0.75rem; font-size: 0.875rem; font-weight: 700; text-align: center; transition: background-color 0.2s; border: none; cursor: pointer; width: 100%; }
+        .btn-sub-blue { background-color: #4f46e5; color: white; }
+        .btn-sub-blue:hover { background-color: #4338ca; }
+        .btn-sub-gold { background-color: #fbbf24; color: #1e1b4b; }
+        .btn-sub-gold:hover { background-color: #f59e0b; }
+
+        /* Direct Support Banner Layout Component */
+        .support-banner { max-width: 80rem; margin: 0 auto 3rem auto; padding: 0 1.5rem; width: 100%; }
+        .support-card-container { background-color: #1e1b4b; border-radius: 1.25rem; padding: 2.5rem 1.5rem; text-align: center; color: white; display: flex; flex-direction: column; align-items: center; gap: 1.25rem; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
+        .support-card-container h2 { font-size: 1.75rem; font-weight: 800; letter-spacing: -0.025em; }
+        .support-card-container p { color: #cbd5e1; font-size: 0.9375rem; max-width: 36rem; line-height: 1.5; }
+        .support-grid-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; width: 100%; margin-top: 0.5rem; }
+        
+        .btn-support-item { text-decoration: none; background-color: rgba(15, 23, 42, 0.4); border: 1px solid rgba(255, 255, 255, 0.1); padding: 0.75rem 1.5rem; border-radius: 0.875rem; display: inline-flex; align-items: center; gap: 0.75rem; min-width: 240px; text-align: left; color: white; transition: background-color 0.2s; }
+        .btn-support-item:hover { background-color: rgba(15, 23, 42, 0.6); }
+        .icon-circle-box { width: 2.25rem; height: 2.25rem; border-radius: 0.5rem; display: flex; align-items: center; justify-content: center; font-size: 1.125rem; }
+        .icon-box-gold { background-color: rgba(251, 191, 36, 0.15); color: #fbbf24; }
+        .icon-box-green { background-color: rgba(16, 185, 129, 0.15); color: #10b981; }
+
+        /* Integrated Bottom Link Bar Container */
+        .bottom-link-bar { max-width: 80rem; margin: 0 auto 3rem auto; padding: 0 1.5rem; width: 100%; }
+        .link-container-box { background-color: white; border: 1px solid #e2e8f0; border-radius: 1rem; padding: 1.5rem; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
+        .btn-link-action { text-decoration: none; background-color: #4f46e5; color: white; padding: 0.75rem 2rem; font-size: 0.875rem; font-weight: 700; border-radius: 0.75rem; display: inline-flex; align-items: center; gap: 0.5rem; transition: background-color 0.2s; box-shadow: 0 2px 4px rgba(79, 70, 229, 0.2); }
+        .btn-link-action:hover { background-color: #4338ca; }
     </style>
 </head>
 <body>
-
-    <header>
-        <div class="header-container">
-            <!-- Logo & Title -->
-            <div class="flex-items" style="cursor: pointer;">
-                <div class="logo-box"><i class="fa-solid fa-crown"></i></div>
-                <div>
-                    <h1 style="color: white; font-weight: 700; font-size: 1.125rem;">Crown Academy</h1>
-                    <p style="color: #c7d2fe; font-size: 0.75rem;">AI Test & Exam Generator</p>
-                </div>
-            </div>
-
-            <!-- Navigation Links -->
-            <nav class="nav-links">
-                <a href="#">Home</a>
-                <a href="#pricing">Pricing</a>
-                <a href="#pricing">Contact</a>
-                <a href="https://share.gemini.google/amPYZVwhzNaj" style="color: #fcd34d; font-weight: 700;">Generator Tool</a>
-            </nav>
-
-            <!-- Language and Authentication Presets -->
-            <div class="flex-items">
-                <div class="lang-wrap">
-                    <button class="btn-lang active">🇬🇧 EN</button>
-                    <button class="btn-lang">🇿🇦 AF</button>
-                </div>
-                <div class="flex-items" style="gap: 0.5rem;">
-                    <a href="https://share.gemini.google/amPYZVwhzNaj" class="btn-gold">
-                        <i class="fa-solid fa-right-to-bracket"></i><span>Log In</span>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </header>
 
     <main class="flex-1 flex flex-col">
         <!-- HERO JUMBOTRON LAYER -->
@@ -103,7 +96,7 @@
                 <h1>Generate Professional Tests & Memorandums in Seconds</h1>
                 <p>Designed for educators and learners. Create custom assessments for Grades 1–12 with step-by-step bulleted marking memorandums, interactive practice, and instant print export.</p>
                 <div style="display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center; margin-top: 1rem;">
-                    <a href="https://share.gemini.google/amPYZVwhzNaj" class="btn-gold" style="padding: 0.875rem 1.5rem; font-size: 0.875rem;">
+                    <a href="https://gemini.google" class="btn-gold" style="padding: 0.875rem 1.5rem; font-size: 0.875rem;">
                         <i class="fa-solid fa-wand-magic-sparkles"></i> <span>Open Test Generator</span>
                     </a>
                     <a href="#pricing" class="btn-outline" style="padding: 0.875rem 1.5rem; font-size: 0.875rem; background-color: #4338ca;">
@@ -117,22 +110,3 @@
         <section class="grid-section">
             <div class="card-feature">
                 <div class="card-icon icon-blue"><i class="fa-solid fa-graduation-cap"></i></div>
-                <div><h3>Caps Aligned Content</h3><p>Aligned with standard curriculum requirements, examination structures and grade difficulty boundaries.</p></div>
-            </div>
-            <div class="card-feature">
-                <div class="card-icon icon-amber"><i class="fa-solid fa-list-check"></i></div>
-                <div><h3>Step-by-Step Bulleted Memos</h3><p>Generates comprehensive marking guidelines automatically formatted with clear itemized point listings.</p></div>
-            </div>
-            <div class="card-feature">
-                <div class="card-icon icon-green"><i class="fa-solid fa-file-pdf"></i></div>
-                <div><h3>Instant PDF Download</h3><p>Download clean assessment documents and memoranda formatted natively for standard school distribution.</p></div>
-            </div>
-        </section>
-
-        <!-- PRICING MATRIX PLANS SECTION LAYER -->
-        <section id="pricing" class="pricing-section">
-            <h2 style="font-size: 1.75rem; font-weight: 800; color: #0f172a;">Get Unlimited Access to Everything</h2>
-            <p style="color: #64748b; font-size: 0.875rem; margin-top: 0.25rem;">Subscribe directly via Call or WhatsApp at <strong style="color:#4f46e5;">+27 64 971 8513</strong></p>
-            
-            <div class="pricing-grid">
-                <div class="price-card">
