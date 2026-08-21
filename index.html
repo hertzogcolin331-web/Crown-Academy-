@@ -1352,13 +1352,25 @@ Difficulty Level: ${difficulty}`;
                 generationConfig: {
                     responseMimeType: "application/json"
                 }
-//  PASTE THIS INSTEAD:
-// Swap out your key here. 
-// Hardcode it ONLY if your GitHub repository is private!
-const openRouterKey = "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"; 
-const targetModel = "google/gemini-2.5-flash"; // Or use "openai/gpt-4o-mini"
+            };
 
-const response = await fetch("https://openrouter.ai", {
+            const apiKey = "";
+let openRouterKey = localStorage.getItem('or_key');
+
+if (!openRouterKey) {
+    const userInputKey = prompt("Welcome to Crown Academy! Please enter an OpenRouter API Key to power the test generator:");
+    if (!userInputKey) {
+        alert("An API key is required to generate test content.");
+        return; 
+    }
+    openRouterKey = userInputKey.trim();
+    localStorage.setItem('or_key', openRouterKey);
+}
+
+const targetModel = "google/gemini-2.5-flash"; 
+const apiUrl = "https://openrouter.ai";
+
+const response = await fetch(apiUrl, {
     method: "POST",
     headers: {
         "Content-Type": "application/json",
@@ -1367,17 +1379,18 @@ const response = await fetch("https://openrouter.ai", {
     },
     body: JSON.stringify({
         model: targetModel,
-        messages: [
-            { role: "user", content: promptText }
-        ],
+        messages: [{ role: "user", content: promptText }],
         temperature: 0.3
     })
 });
 
+if (!response.ok) {
+    const rawError = await response.json();
+    throw new Error(rawError.error?.message || `HTTP Error: ${response.status}`);
+}
 
-                if (!response.ok) {
-                    throw new Error(`API response status: ${response.status}`);
-                }
+const data = await response.json();
+const generatedText = data.choices.message.content;
 
                 const result = await response.json();
                 const jsonText = result.candidates?.[0]?.content?.parts?.[0]?.text;
