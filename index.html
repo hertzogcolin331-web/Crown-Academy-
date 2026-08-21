@@ -1347,9 +1347,9 @@ Difficulty Level: ${difficulty}`;
             }
 
     // 1. Check for OpenRouter API Key in localStorage or prompt if missing
-    let apiKey = localStorage.getItem('openrouter_api_key');
+let apiKey = localStorage.getItem('openrouter_api_key');
     if (!apiKey) {
-        const key = prompt("sk-or-v1-e280a7ac4a32fb62761185c5dc45 edabb52fd7694404b4998e82d66c885e2dfb");
+        const key = prompt("Please enter your OpenRouter API Key to continue:");
         if (!key) return;
         apiKey = key.trim();
         localStorage.setItem('openrouter_api_key', apiKey);
