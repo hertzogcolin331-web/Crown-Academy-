@@ -1856,11 +1856,58 @@ const generatedText = data.choices.message.content;
         function printTest() {
             window.print();
         }
+// ==========================================
+// CROWN ACADEMY BUTTONS & NAV ACTIVATION
+// ==========================================
+function activateCrownNavigation() {
+    document.querySelectorAll('nav a, nav button, .nav-links a').forEach(element => {
+        const text = element.textContent.toLowerCase();
+        
+        if (text.includes('admin panel')) {
+            element.onclick = (e) => { e.preventDefault(); switchCrownView('admin'); };
+        }
+        else if (text.includes('generator tool') || text.includes('open test generator')) {
+            element.onclick = (e) => { e.preventDefault(); switchCrownView('generator'); };
+        }
+        else if (text.includes('log in') || text.includes('teacher account')) {
+            element.onclick = (e) => { e.preventDefault(); switchCrownView('login'); };
+        }
+    });
 
-        window.onload = function() {
-            getStoredAccounts(); // Initialize account database in persistent storage
-            setLanguage('en');
-        };
+    // Wire up the Submit/Login button on your sign-in card
+    document.querySelectorAll('button').forEach(btn => {
+        if (btn.textContent.toLowerCase().includes('log in')) {
+            btn.onclick = (e) => {
+                e.preventDefault();
+                alert("Welcome back to Crown Academy workspace!");
+                switchCrownView('generator');
+            };
+        }
+    });
+}
+
+function switchCrownView(viewTarget) {
+    const headings = Array.from(document.querySelectorAll('h3, h2, h1'));
+    
+    // Find the containers dynamically based on the text headings inside them
+    let adminSection = headings.find(h => h.textContent.includes('Admin Control Panel'))?.parentElement;
+    let loginSection = headings.find(h => h.textContent.includes('Sign In Required'))?.parentElement;
+    let generatorSection = headings.find(h => h.textContent.includes('Test Setup'))?.parentElement;
+    let heroBanner = document.querySelector('header.hero') || headings.find(h => h.textContent.includes('Professional Tests'))?.parentElement;
+
+    // Hide everything first, then show only the selected section
+    if (adminSection) adminSection.style.display = (viewTarget === 'admin') ? 'block' : 'none';
+    if (loginSection) loginSection.style.display = (viewTarget === 'login') ? 'block' : 'none';
+    if (generatorSection) generatorSection.style.display = (viewTarget === 'generator') ? 'block' : 'none';
+    if (heroBanner) heroBanner.style.display = (viewTarget === 'generator') ? 'block' : 'none';
+}
+
+window.onload = function() {
+    if (typeof getStoredAccounts === 'function') getStoredAccounts(); 
+    if (typeof setLanguage === 'function') setLanguage('en');
+    activateCrownNavigation(); 
+};
+
     </script>
 </body>
 </html>
