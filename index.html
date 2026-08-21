@@ -1884,30 +1884,61 @@ function activateCrownNavigation() {
             };
         }
     });
-}
-
 function switchCrownView(viewTarget) {
-    const headings = Array.from(document.querySelectorAll('h3, h2, h1'));
+    const headings = Array.from(document.querySelectorAll('h1, h2, h3, h4'));
     
-    // Find the containers dynamically based on the text headings inside them
-    let adminSection = headings.find(h => h.textContent.includes('Admin Control Panel'))?.parentElement;
-    let loginSection = headings.find(h => h.textContent.includes('Sign In Required'))?.parentElement;
-    let generatorSection = headings.find(h => h.textContent.includes('Test Setup'))?.parentElement;
-    let heroBanner = document.querySelector('header.hero') || headings.find(h => h.textContent.includes('Professional Tests'))?.parentElement;
+    // Dynamically locate the outer block sections on your page
+    let adminSection = headings.find(h => h.textContent.includes('Admin Control Panel'))?.closest('div, section, article');
+    let loginSection = headings.find(h => h.textContent.includes('Sign In Required'))?.closest('div, section, article');
+    let generatorSection = headings.find(h => h.textContent.includes('Test Setup'))?.closest('div, section, article');
+    let heroBanner = document.querySelector('header.hero') || headings.find(h => h.textContent.includes('Professional Tests'))?.closest('div, section, article');
 
-    // Hide everything first, then show only the selected section
+    // Force hidden sections to hide cleanly
     if (adminSection) adminSection.style.display = (viewTarget === 'admin') ? 'block' : 'none';
     if (loginSection) loginSection.style.display = (viewTarget === 'login') ? 'block' : 'none';
     if (generatorSection) generatorSection.style.display = (viewTarget === 'generator') ? 'block' : 'none';
     if (heroBanner) heroBanner.style.display = (viewTarget === 'generator') ? 'block' : 'none';
 }
 
-window.onload = function() {
-    if (typeof getStoredAccounts === 'function') getStoredAccounts(); 
-    if (typeof setLanguage === 'function') setLanguage('en');
-    activateCrownNavigation(); 
-};
+function activateCrownNavigation() {
+    // Find all links and buttons inside your navigation bar
+    document.querySelectorAll('nav a, nav button, .nav-links a').forEach(element => {
+        const text = element.textContent.toLowerCase();
+        
+        if (text.includes('admin panel')) {
+            element.onclick = (e) => { e.preventDefault(); switchCrownView('admin'); };
+        }
+        else if (text.includes('generator tool') || text.includes('open test generator')) {
+            element.onclick = (e) => { e.preventDefault(); switchCrownView('generator'); };
+        }
+        else if (text.includes('log in') || text.includes('teacher account')) {
+            element.onclick = (e) => { e.preventDefault(); switchCrownView('login'); };
+        }
+    });
 
-    </script>
+    // Wire up the Submit/Login button inside your card forms
+    document.querySelectorAll('button').forEach(btn => {
+        if (btn.textContent.toLowerCase().includes('log in')) {
+            btn.onclick = (e) => {
+                e.preventDefault();
+                alert("Welcome back to Crown Academy workspace!");
+                switchCrownView('generator');
+            };
+        }
+    });
+}
+
+// Global browser bootstrapper window loader entrypoint
+window.onload = function() {
+    if (typeof getStoredAccounts === 'function') getStoredAccounts();
+    if (typeof setLanguage === 'function') setLanguage('en');
+    
+    // Initialize interaction handlers
+    activateCrownNavigation();
+    
+    // Set default initial screen state configuration view
+    switchCrownView('generator');
+};
+</script>
 </body>
 </html>
